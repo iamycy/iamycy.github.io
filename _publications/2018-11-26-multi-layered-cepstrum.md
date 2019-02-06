@@ -5,8 +5,6 @@ permalink: /publication/2018-11-26-multi-layered-cepstrum
 excerpt: 'This paper is about MPE.'
 date: 2018-11-26
 venue: 'IEEE Global Conference on Signal and Information Processing'
-paperurl: 'http://academicpages.github.io/files/paper2.pdf'
-citation: 'Chin-Yun Yu and Li Su, &quot;Multi-layered Cepstrum for Instantaneous Frequency Estimation,&quot; <i>IEEE Global Conference on Signal and Information Processing</i>, November 2018.'
 ---
 This paper is about the number 2. The number 3 is left for future work.
 
