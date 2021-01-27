@@ -10,10 +10,10 @@ locale                   : "en-US"
 title                    : "Chin Yun Yu"
 title_separator          : "-"
 name                     : &name "Chin Yun Yu"
-description              : &description "personal description"
+description              : &description "Independent Researcher/Software Engineer"
 url                      : https://yoyololicon.github.io # the base hostname & protocol for your site e.g. "https://mmistakes.github.io"
 baseurl                  : "" # the subpath of your site, e.g. "/blog"
-repository               : "yoyololicon/yoyololicon.github.io"
+repository               : "yoyololicon.github.io"
 teaser                   :  # filename of teaser fallback teaser image placed in /images/, .e.g. "500x300.png"
 breadcrumbs              : false # true, false (default)
 words_per_minute         : 160
@@ -80,23 +80,23 @@ analytics:
 
 # Site Author
 author:
-  name             : "Your Sidebar Name"
-  avatar           : "profile.png"
-  bio              : "Your biography for the left-hand sidebar"
-  location         : "Location"
+  name             : "Chin Yun Yu"
+  avatar           : "raiosu.png"
+  bio              : "Independent Researcher/Software Engineer/MIR enthusiast/DjentleMan"
+  location         : "Taiwan"
   employer         :
-  googlescholar    : 
+  googlescholar    : # "7lXfBBYAAAAJ"
+  email            : "ya70201@gmail.com"
+  pubmed           : # "https://www.ncbi.nlm.nih.gov/pubmed/?term=john+snow"
+  googlescholar    : "https://scholar.google.com/citations?user=7lXfBBYAAAAJ"
   email            :
-  pubmed           : "https://www.ncbi.nlm.nih.gov/pubmed/?term=john+snow"
-  googlescholar    : "http://yourfullgooglescholarurl.com"
-  email            :
-  researchgate     :  # example: "https://www.researchgate.net/profile/yourprofile"
+  researchgate     : "https://www.researchgate.net/profile/Chin_Yun_Yu"
   uri              :
   bitbucket        :
   codepen          :
   dribbble         :
   flickr           :
-  facebook         :
+  facebook         : "YCYislolicon"
   foursquare       :
   github           : "yoyololicon"
   google_plus      :
@@ -104,18 +104,18 @@ author:
   instagram        :
   impactstory      : #"https://profiles.impactstory.org/u/xxxx-xxxx-xxxx-xxxx"
   lastfm           :
-  linkedin         :
+  linkedin         : "chin-yun-yu-539570160"
   orcid            : "http://orcid.org/yourorcidurl"
   pinterest        :
-  soundcloud       : 
+  soundcloud       : "loli-master"
   stackoverflow    : # http://stackoverflow.com/users/123456/username
-  steam            :
+  steam            : 
   tumblr           :
   twitter          : 
   vine             :
   weibo            :
   xing             :
-  youtube          :
+  youtube          : "UC9YVkIwdzlG1LxwgOl2Co6g"
   wikipedia        :
 
 
