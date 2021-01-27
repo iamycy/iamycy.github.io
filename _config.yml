@@ -82,14 +82,14 @@ analytics:
 author:
   name             : "Chin Yun Yu"
   avatar           : "raiosu.png"
-  bio              : "Independent Researcher/Software Engineer/MIR enthusiast/DjentleMan"
+  bio              : "Independent Researcher/Software Engineer/MIR Enthusiast/DjentleMan"
   location         : "Taiwan"
   employer         :
   googlescholar    : # "7lXfBBYAAAAJ"
   email            : "ya70201@gmail.com"
   pubmed           : # "https://www.ncbi.nlm.nih.gov/pubmed/?term=john+snow"
   googlescholar    : "https://scholar.google.com/citations?user=7lXfBBYAAAAJ"
-  email            :
+  email            : "ya70201@gmail.com"
   researchgate     : "https://www.researchgate.net/profile/Chin_Yun_Yu"
   uri              :
   bitbucket        :
@@ -105,7 +105,7 @@ author:
   impactstory      : #"https://profiles.impactstory.org/u/xxxx-xxxx-xxxx-xxxx"
   lastfm           :
   linkedin         : "chin-yun-yu-539570160"
-  orcid            : "http://orcid.org/yourorcidurl"
+  orcid            : # "http://orcid.org/yourorcidurl"
   pinterest        :
   soundcloud       : "loli-master"
   stackoverflow    : # http://stackoverflow.com/users/123456/username
@@ -115,7 +115,7 @@ author:
   vine             :
   weibo            :
   xing             :
-  youtube          : "UC9YVkIwdzlG1LxwgOl2Co6g"
+  youtube          : "https://www.youtube.com/channel/UC9YVkIwdzlG1LxwgOl2Co6g"
   wikipedia        :
 
 
