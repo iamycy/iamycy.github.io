@@ -47,6 +47,8 @@ Skills
 * Machine Learning
 * Deep Learning
 * DSP
+* Spatial Audio
+  * Head Related Transfer Function Spatial Upsampling
 * Music Production
 * Musical Instruments
   * Piano
