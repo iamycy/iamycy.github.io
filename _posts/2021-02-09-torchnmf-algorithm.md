@@ -1,7 +1,7 @@
 ---
 title: 'How to Train Deep NMF Model in PyTorch'
 date: 2021-02-09
-permalink: /posts/2021/02/blog-post-1/
+permalink: /posts/2021/02/torchnmf-algorithm/
 tags:
   - side project
   - scientific computing
