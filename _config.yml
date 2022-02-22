@@ -9,7 +9,7 @@
 locale                   : "en-US"
 title                    : "Kazane Ryo no Danna"
 title_separator          : "-"
-name                     : &name "Chin Yun Yu"
+name                     : &name "Chin-Yun Yu"
 description              : &description "Independent Researcher/Software Engineer"
 url                      : https://yoyololicon.github.io # the base hostname & protocol for your site e.g. "https://mmistakes.github.io"
 baseurl                  : "" # the subpath of your site, e.g. "/blog"
@@ -80,7 +80,7 @@ analytics:
 
 # Site Author
 author:
-  name             : "Chin Yun Yu"
+  name             : "Chin-Yun Yu"
   avatar           : "raiosu.png"
   bio              : "Independent Researcher/Software Engineer/MIR Enthusiast/DjentleMan"
   location         : "Taiwan"
