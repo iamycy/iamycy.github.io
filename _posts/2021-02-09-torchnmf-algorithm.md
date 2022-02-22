@@ -59,7 +59,7 @@ It is indeed composed by two non-negative functions.
 
 ## 2 Backward-Pass Algorithm
 
-Now we can see that, the two non-negative functions respect to the parameter can be viewed as two non-negative functions respect to the NMF output each multiplied by the derivative of NMF output respect to the parameter. The latter can be evaluated by PyTorch automatic differentiation, so we only need to calculate the former. After calculating the former, we just need to back-propagate the computational graph 2 times, then we can get the multiplicative update weights.
+Now we can see that the two non-negative functions respect to the parameter can be viewed as two non-negative functions respect to the NMF output each multiplied by the derivative of NMF output respect to the parameter. The latter can be evaluated by PyTorch automatic differentiation, so we only need to calculate the former. After calculating the former, we just need to back-propagate the computational graph 2 times, then we can get the multiplicative update weights.
 
 ### Steps
 
