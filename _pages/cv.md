@@ -44,12 +44,16 @@ Skills
   * Golang
 * Music Information Retrieval
   * Multi Pitch Estimation
+  * Source Separation
 * Machine Learning
 * Deep Learning
 * DSP
 * Spatial Audio
   * Head Related Transfer Function Spatial Upsampling
 * Music Production
+  * Song Writing
+  * Drums Editing
+  * Mixing
 * Musical Instruments
   * Piano
   * Violin
