@@ -10,7 +10,7 @@ locale                   : "en-US"
 title                    : "Kazane Ryo no Danna"
 title_separator          : "-"
 name                     : &name "Chin-Yun Yu"
-description              : &description "Independent Researcher/Software Engineer"
+description              : &description "Researcher & Software/Algorithm Engineer"
 url                      : https://yoyololicon.github.io # the base hostname & protocol for your site e.g. "https://mmistakes.github.io"
 baseurl                  : "" # the subpath of your site, e.g. "/blog"
 repository               : "yoyololicon.github.io"
@@ -82,14 +82,12 @@ analytics:
 author:
   name             : "Chin-Yun Yu"
   avatar           : "raiosu.png"
-  bio              : "Independent Researcher/Software Engineer/MIR Enthusiast/DjentleMan"
-  location         : "Taiwan"
+  bio              : "Researcher/Software Engineer/MIR Enthusiast/DjentleMan"
+  location         : "UK/Taiwan"
   employer         :
-  googlescholar    : # "7lXfBBYAAAAJ"
-  email            : "ya70201@gmail.com"
+  email            : "chin-yun.yu@qmul.ac.uk"
   pubmed           : # "https://www.ncbi.nlm.nih.gov/pubmed/?term=john+snow"
   googlescholar    : "https://scholar.google.com/citations?user=7lXfBBYAAAAJ"
-  email            : "ya70201@gmail.com"
   researchgate     : "https://www.researchgate.net/profile/Chin_Yun_Yu"
   uri              :
   bitbucket        :
@@ -105,7 +103,7 @@ author:
   impactstory      : #"https://profiles.impactstory.org/u/xxxx-xxxx-xxxx-xxxx"
   lastfm           :
   linkedin         : "chin-yun-yu-539570160"
-  orcid            : # "http://orcid.org/yourorcidurl"
+  orcid            : "http://orcid.org/0000-0003-3782-2713"
   pinterest        :
   soundcloud       : "loli-master"
   stackoverflow    : # http://stackoverflow.com/users/123456/username
