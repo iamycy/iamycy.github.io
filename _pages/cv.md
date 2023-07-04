@@ -12,6 +12,7 @@ redirect_from:
 Education
 ======
 * B.S. in Computer Science, National Chiao Tung University, 2018
+* Ph.D in Electronic Engineering and Computer Science, Queen Mary University of London, 2026 (expected)
 
 Work experience
 ======
@@ -30,7 +31,7 @@ Work experience
   * Duties included: Applying Deep Learning Techniques on HRTF applications
   * Supervisor: VP Vasco Choi
   
-* Winter 2020 - present: Backend Engineer
+* Winter 2020 - 2022: Backend Engineer
   * Backend R&D, Rayark Inc.
   * Duties included: Design and implement mobile game servers
   * Supervisor: CTO Alvin
@@ -45,6 +46,7 @@ Skills
 * Music Information Retrieval
   * Multi Pitch Estimation
   * Source Separation
+  * Voice Generation/Synthesis
 * Machine Learning
 * Deep Learning
 * DSP
