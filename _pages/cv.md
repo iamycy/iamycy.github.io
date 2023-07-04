@@ -31,7 +31,7 @@ Work experience
   * Duties included: Applying Deep Learning Techniques on HRTF applications
   * Supervisor: VP Vasco Choi
   
-* Winter 2020 - 2022: Backend Engineer
+* Winter 2020 - Summer 2022: Backend Engineer
   * Backend R&D, Rayark Inc.
   * Duties included: Design and implement mobile game servers
   * Supervisor: CTO Alvin
