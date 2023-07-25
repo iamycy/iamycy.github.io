@@ -27,6 +27,7 @@ I love making contributions on Github. Some of my most starred projects are:
 - [variational-diffwave](https://github.com/yoyololicon/variational-diffwave): training DiffWave with unbiased ELBO.
 
 I'm also the main contributor to making [torchaudio.functional.lfilter](https://pytorch.org/audio/stable/functional.html#lfilter) differentiable.
+To know what I'm working on at the moment, you can check out my [Kanban](https://github.com/users/yoyololicon/projects/3/) on GitHub.
 
 My hobbies are music, manga, anime, and vtubers. My music taste is very broad and can be ranged from Heavy Metal, Djent, Post-Hardcore, to Happy Hardcore, Trance, Future Funk, Ani-Song, Lo-Fi, etc. I also produced some music (see my [portfolio](/music/) page) under the name **Y.C.Y**.
 
