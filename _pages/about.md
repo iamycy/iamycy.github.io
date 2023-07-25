@@ -19,7 +19,7 @@ Before I started my PhD, I was doing software engineering and had worked for [HT
 I also do independent research in my spare time.
 My research interests include audio signal processing, music information retrieval, binaural audio, and machine learning.
 
-I love making contributions on Github. Some of my most starred projects are:
+I love making contributions on GitHub. Some of my most starred projects are:
 
 - [torch_specinv](https://spectrogram-inversion.readthedocs.io/): a collections of spectrogram inversion algorithms.
 - [torchnmf](https://pytorch-nmf.readthedocs.io/): a package that can help build complex NMF models.
