@@ -4,7 +4,7 @@ collection: publications
 permalink: /publications/2020-12-10-harmonic-preserve-network
 excerpt:
 date: 2020-12-10
-venue: '2020 Asia-Pacific Signal and Information Processing Association Annual Summit and Conference (APSIPA ASC)'
+venue: 'Asia-Pacific Signal and Information Processing Association Annual Summit and Conference (APSIPA ASC)'
 paperurl: 'https://ieeexplore.ieee.org/abstract/document/9306345'
 citation: 'Chin-Yun Yu, Jing-Hua Lin, and Li Su, &quot;Harmonic Preserving Neural Networks for Efficient and Robust Multipitch Estimation&quot;, <i>Asia-Pacific Signal and Information Processing Association Annual Summit and Conference</i>, December 2020.'
 ---

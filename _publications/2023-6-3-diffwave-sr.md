@@ -4,7 +4,7 @@ collection: publications
 permalink: /publications/2023-6-3-diffwave-sr
 excerpt:
 date: 2023-6-3
-venue: '2023 IEEE International Conference on Acoustics, Speech and Signal Processing (ICASSP)'
+venue: 'IEEE International Conference on Acoustics, Speech and Signal Processing (ICASSP)'
 paperurl: 'https://ieeexplore.ieee.org/abstract/document/10095103'
 citation: 'Chin-Yun Yu, Sung-Lin Yeh, György Fazekas, and Hao Tang, &quot;Conditioning and Sampling in Variational Diffusion Models for Speech Super-Resolution&quot;, <i>IEEE International Conference on Acoustics, Speech and Signal Processing</i>, June 2023.'
 ---

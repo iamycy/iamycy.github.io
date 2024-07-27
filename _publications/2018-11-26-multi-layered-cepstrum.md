@@ -4,7 +4,7 @@ collection: publications
 permalink: /publications/2018-11-26-multi-layered-cepstrum
 excerpt:
 date: 2018-11-26
-venue: '2018 IEEE Global Conference on Signal and Information Processing (GlobalSIP)'
+venue: 'IEEE Global Conference on Signal and Information Processing (GlobalSIP)'
 paperurl: 'https://ieeexplore.ieee.org/document/8646684'
 citation: 'Chin-Yun Yu and Li Su, &quot;Multi-layered Cepstrum for Instantaneous Frequency Estimation&quot;, <i>IEEE Global Conference on Signal and Information Processing</i>, Novermber 2018.'
 ---
