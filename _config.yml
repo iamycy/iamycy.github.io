@@ -7,7 +7,7 @@
 # server process.
 
 # Basic Site Settings
-locale: "en-US"
+locale: "en-gb"
 title: "Kazane Ryo no Danna"
 title_separator: "-"
 name: &name "Chin-Yun Yu"
