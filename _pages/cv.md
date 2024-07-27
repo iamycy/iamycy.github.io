@@ -36,6 +36,11 @@ Work experience
   * Duties included: Design and implement mobile game servers
   * Supervisor: CTO Alvin
 
+* Summer 2024 - Present: Research Intern
+  * Sony AI, Sony
+  * Duties included: differentiable audio processing and audio mixing
+  * Supervisor: Manager Weih Siang Liao
+
 
 Skills
 ======
@@ -43,15 +48,17 @@ Skills
   * C/C++
   * Python
   * Golang
+  * Haskell
 * Music Information Retrieval
-  * Multi Pitch Estimation
+  * Multi-Pitch Estimation
   * Source Separation
   * Voice Generation/Synthesis
 * Machine Learning
 * Deep Learning
 * DSP
 * Spatial Audio
-  * Head Related Transfer Function Spatial Upsampling
+  * Head Related Transfer Functions
+* Qiskit (Quantum Programming)
 * Music Production
   * Song Writing
   * Drums Editing
