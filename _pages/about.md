@@ -8,7 +8,7 @@ redirect_from:
   - /about.html
 ---
 
-I’m a second-year PhD student in [UKRI Centre for Doctoral Training in Artificial Intelligence and Music](https://www.aim.qmul.ac.uk/) programme at C4DM, Queen Mary University of London, supervised by Dr. [György Fazekas](http://www.eecs.qmul.ac.uk/~gyorgyf/).
+I’m a third-year PhD student in [UKRI Centre for Doctoral Training in Artificial Intelligence and Music](https://www.aim.qmul.ac.uk/) programme at C4DM, Queen Mary University of London, supervised by Dr. [György Fazekas](http://www.eecs.qmul.ac.uk/~gyorgyf/).
 My current PhD theme is about leveraging deep generative models and signal processing techniques for controllable and expressive voice synthesis.
 The projects I made for achieving this goal are:
 
