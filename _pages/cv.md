@@ -11,35 +11,62 @@ redirect_from:
 
 Education
 ======
-* Ph.D in Version Control Theory, GitHub University, 2018 (expected)
-* M.S. in Jekyll, GitHub University, 2014
-* B.S. in GitHub, GitHub University, 2012
+* B.S. in Computer Science, National Chiao Tung University, Taiwan, 2018
+* Ph.D in Electronic Engineering and Computer Science, Queen Mary University of London, UK, 2026 (expected)
 
 Work experience
 ======
-* Spring 2024: Academic Pages Collaborator
-  * Github University
-  * Duties includes: Updates and improvements to template
-  * Supervisor: The Users
+* Summer 2017: Intern
+  * Institute of Information Science, Academia Sinica, Taipei, Taiwan
+  * Duties include: Developing Cepstrum-Based Music Transcription System
+  * Supervisor: Professor Li Su
 
-* Fall 2015: Research Assistant
-  * Github University
-  * Duties included: Merging pull requests
-  * Supervisor: Professor Hub
+* 2018: Research Assistant
+  * Institute of Information Science, Academia Sinica, Taipei, Taiwan
+  * Duties include: Doing Research on NN-based Vocoder Model/Developing End-to-End Music Transcription Model
+  * Supervisor: Professor Li Su
 
-* Summer 2015: Research Assistant
-  * Github University
-  * Duties included: Tagging issues
-  * Supervisor: Professor Git
+* Summer 2019 - Winter 2020: Engineer
+  * Vive R&D, HTC, New Taipei City, Taiwan
+  * Duties include: Applying Deep Learning Techniques on HRTF applications
+  * Supervisor: VP Vasco Choi
   
+* Winter 2020 - Summer 2022: Backend Engineer
+  * Backend R&D, Rayark Inc., Taipei, Taiwan
+  * Duties include: Design and implement mobile game servers
+  * Supervisor: CTO Alvin
+
+* Summer 2024 - Present: Research Intern
+  * Sony AI, Sony, Tokyo, Japan
+  * Duties include: differentiable audio processing and audio mixing
+  * Supervisor: Manager Weih Siang Liao
+
+
 Skills
 ======
-* Skill 1
-* Skill 2
-  * Sub-skill 2.1
-  * Sub-skill 2.2
-  * Sub-skill 2.3
-* Skill 3
+* Programming Language
+  * C/C++
+  * Python
+  * Golang
+  * Haskell
+* Music Information Retrieval
+  * Multi-Pitch Estimation
+  * Source Separation
+  * Voice Generation/Synthesis
+* Machine Learning
+* Deep Learning
+* DSP
+* Spatial Audio
+  * Head Related Transfer Functions
+* Qiskit (Quantum Programming)
+* Music Production
+  * Song Writing
+  * Drums Editing
+  * Mixing
+* Musical Instruments
+  * Piano
+  * Violin
+  * Electric Guitar
 
 Publications
 ======
@@ -50,15 +77,5 @@ Publications
 Talks
 ======
   <ul>{% for post in site.talks reversed %}
-    {% include archive-single-talk-cv.html  %}
+    {% include archive-single-talk-cv.html %}
   {% endfor %}</ul>
-  
-Teaching
-======
-  <ul>{% for post in site.teaching reversed %}
-    {% include archive-single-cv.html %}
-  {% endfor %}</ul>
-  
-Service and leadership
-======
-* Currently signed in to 43 different slack teams
