@@ -12,9 +12,9 @@ title: "Kazane Ryo no Danna"
 title_separator: "-"
 name: &name "Chin-Yun Yu"
 description: &description "Researcher & Software/Algorithm Engineer"
-url: https://yoyololicon.github.io # the base hostname & protocol for your site e.g. "https://mmistakes.github.io"
+url: https://iamycy.github.io # the base hostname & protocol for your site e.g. "https://mmistakes.github.io"
 baseurl: "" # the subpath of your site, e.g. "/blog"
-repository: "yoyololicon.github.io"
+repository: "iamycy.github.io"
 
 # Site Author - The following control what appear as part of the author content on the side bar.
 #               If a field is blank the icon and link will not appear, otherwise it will be shown.
@@ -43,13 +43,13 @@ author:
   bitbucket: # Username - Update with your username on the site
   codepen: # Username
   dribbble: # Username
-  github: "yoyololicon"
+  github: "iamycy"
   kaggle: # Username
   stackoverflow: # User number or user number and name (i.e., use "1" or "1/jeff-atwood")
 
   # Social media
   bluesky: # "bsky.app" # Replace this with you Bluesky username
-  facebook: "YCYislolicon"
+  facebook: # Username
   flickr: # Username
   foursquare: # Username
   goodreads: # Username
@@ -61,7 +61,7 @@ author:
   mastodon: # URL
   medium: # URL
   pinterest: # Username
-  soundcloud: "loli-master"
+  soundcloud: # Username
   steam: # Username
   telegram: # URL
   tumblr: # Username
@@ -71,7 +71,7 @@ author:
   xing: # Username
   youtube: # Username
   zhihu: # URL
-  twitter: "yoyololicon"
+  twitter: # Username
   bandcamp: ycymusic
 
 # Site Settings
