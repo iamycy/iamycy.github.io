@@ -1,6 +1,7 @@
 ---
 title: "Multi-layered Cepstrum for Instantaneous Frequency Estimation"
 collection: publications
+category: conferences
 permalink: /publications/2018-11-26-multi-layered-cepstrum
 excerpt:
 date: 2018-11-26

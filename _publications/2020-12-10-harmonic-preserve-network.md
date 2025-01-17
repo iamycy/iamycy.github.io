@@ -1,6 +1,7 @@
 ---
 title: "Harmonic Preserving Neural Networks for Efficient and Robust Multipitch Estimation"
 collection: publications
+category: conferences
 permalink: /publications/2020-12-10-harmonic-preserve-network
 excerpt:
 date: 2020-12-10

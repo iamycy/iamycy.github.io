@@ -1,6 +1,7 @@
 ---
 title: "Conditioning and Sampling in Variational Diffusion Models for Speech Super-Resolution"
 collection: publications
+category: conferences
 permalink: /publications/2023-6-3-diffwave-sr
 excerpt:
 date: 2023-6-3

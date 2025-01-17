@@ -1,6 +1,7 @@
 ---
 title: "Differentiable All-pole Filters for Time-varying Audio Systems"
 collection: publications
+category: conferences
 permalink: /publications/2024-9-3-diffapf
 excerpt:
 date: 2024-9-3
