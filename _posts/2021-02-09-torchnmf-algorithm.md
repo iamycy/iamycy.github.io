@@ -85,5 +85,5 @@ In this post I show you how PyTorch-NMF apply multiplicative update rules on muc
 # Reference
 
 * Févotte, Cédric, and Jérôme Idier. "Algorithms for nonnegative matrix factorization with the β-divergence." Neural computation 23.9 (2011): 2421-2456.
-* PyTorch-NMF, [source code](https://github.com/yoyololicon/pytorch-NMF)
+* PyTorch-NMF, [source code](https://github.com/yoyolicoris/pytorch-NMF)
 * PyTorch-NMF, [documentation](https://pytorch-nmf.readthedocs.io/)

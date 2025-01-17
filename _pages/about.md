@@ -26,17 +26,17 @@ I love making contributions on GitHub. Some of my most starred projects are:
 - [torch_specinv](https://spectrogram-inversion.readthedocs.io/): a collections of spectrogram inversion algorithms.
 - [torchnmf](https://pytorch-nmf.readthedocs.io/): a package that can help build complex NMF models.
 - [constant-memory-waveglow](https://zenodo.org/record/4353123): training waveglow with constant memory cost.
-- [variational-diffwave](https://github.com/yoyololicon/variational-diffwave): training DiffWave using unbiased ELBO.
+- [variational-diffwave](https://github.com/yoyolicoris/variational-diffwave): training DiffWave using unbiased ELBO.
 - [torchcomp](https://github.com/DiffAPF/torchcomp): efficient implementation of differentiable feed-forward compressor in PyTorch.
 
 I'm also the main contributor to making [torchaudio.functional.lfilter](https://pytorch.org/audio/stable/functional.html#lfilter) differentiable.
-To know what I'm working on at the moment, you can check out my [Kanban](https://github.com/users/yoyololicon/projects/3/) on GitHub.
+To know what I'm working on at the moment, you can check out my [Kanban](https://github.com/users/yoyolicoris/projects/3/) on GitHub.
 
 My hobbies are music, manga, anime, and vtubers. My music taste is very broad and can be ranged from Heavy Metal, Djent, Post-Hardcore, to Happy Hardcore, Trance, Future Funk, Ani-Song, Lo-Fi, etc. I also made some music (see my [portfolio](/music/) page) under the name **Y.C.Y**.
 
 
 If you want to contact me for any reason, you can reach me via email or Twitter.
-If you're interested in what I'm doing and want to support me, you can consider buying me a coffee on [GitHub](https://github.com/sponsors/yoyololicon), where you can also book me for a 1-on-1 code review session.
+If you're interested in what I'm doing and want to support me, you can consider buying me a coffee on [GitHub](https://github.com/sponsors/yoyolicoris), where you can also book me for a 1-on-1 code review session.
 
 
 

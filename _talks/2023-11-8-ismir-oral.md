@@ -17,4 +17,4 @@ allowfullscreen>
 </iframe>
 
 
-[Download slides here](https://github.com/yoyololicon/presentations/tree/main/slides/2023/ismir.pdf)
+[Download slides here](https://github.com/yoyolicoris/presentations/tree/main/slides/2023/ismir.pdf)
