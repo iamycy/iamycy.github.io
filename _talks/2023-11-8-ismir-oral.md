@@ -2,6 +2,7 @@
 title: "Oral presentation of GOLF vocoder at ISMIR 2023"
 collection: talks
 type: "Talk"
+excerpt: ""
 permalink: /talks/2023-11-8-ismir-oral
 venue: "Politecnico di Milano, Leonardo Campus"
 date: 2023-11-8
