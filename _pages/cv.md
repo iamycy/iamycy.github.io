@@ -36,7 +36,7 @@ Work experience
   * Duties include: Design and implement mobile game servers
   * Supervisor: CTO Alvin
 
-* Summer 2024 - Present: Research Intern
+* Summer 2024 - Winter 2024: Research Intern
   * Sony AI, Sony, Tokyo, Japan
   * Duties include: differentiable audio processing and audio mixing
   * Supervisor: Manager Weih Siang Liao
