@@ -81,6 +81,15 @@ words_per_minute: 160
 future: false
 read_more: "disabled" # if enabled, adds "Read more" links to excerpts
 talkmap_link: false #change to true to add link to talkmap on talks page
+
+publication_category:
+  books:
+    title: 'Books'
+  manuscripts:
+    title: 'Journal Articles'    
+  conferences:
+    title: 'Conference Papers'
+
 comments:
   provider: # false (default), "disqus", "discourse", "facebook", "google-plus", "staticman", "custom"
   disqus:
@@ -108,14 +117,16 @@ staticman:
       options:
         format: "iso8601" # "iso8601" (default), "timestamp-seconds", "timestamp-milliseconds"
 atom_feed:
-  hide: false # change to true to hide the RSS feed in the footer
-  path: # blank (default) uses feed.xml
+  hide                   : false     # change to true to hide the RSS feed in the footer
+  path                   : # blank (default) uses feed.xml
+
 
 # SEO Related
 google_site_verification:
 bing_site_verification:
 alexa_site_verification:
 yandex_site_verification:
+
 
 # Social Sharing
 twitter:
@@ -194,7 +205,8 @@ kramdown:
   smart_quotes: lsquo,rsquo,ldquo,rdquo
   enable_coderay: false
 
-# Collections
+
+# These settings control the types of collections used by the template
 collections:
   teaching:
     output: true
@@ -212,7 +224,7 @@ collections:
     output: true
     permalink: /:collection/:path/
 
-# Defaults
+# These settings control how pages and collections are included in the site
 defaults:
   # _posts
   - scope:
@@ -277,6 +289,7 @@ defaults:
       share: true
       comment: true
 
+
 # Sass/SCSS
 sass:
   sass_dir: _sass
@@ -286,7 +299,7 @@ sass:
 permalink: /:categories/:title/
 # paginate: 5 # amount of posts to show
 # paginate_path: /page:num/
-timezone: America/Los_Angeles # http://en.wikipedia.org/wiki/List_of_tz_database_time_zones
+timezone: Etc/UTC # http://en.wikipedia.org/wiki/List_of_tz_database_time_zones
 
 # Plugins
 plugins:
@@ -294,6 +307,7 @@ plugins:
   - jekyll-gist
   - jekyll-paginate
   - jekyll-sitemap
+  - jekyll-redirect-from
   - jemoji
 
 # Mimic GitHub Pages with --safe
@@ -302,8 +316,9 @@ whitelist:
   - jekyll-gist
   - jekyll-paginate
   - jekyll-sitemap
+  - jekyll-redirect-from
   - jemoji
-
+  
 # Archives
 #  Type
 #  - GitHub Pages compatible archive pages built with Liquid ~> type: liquid (default)
