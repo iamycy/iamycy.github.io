@@ -3,7 +3,7 @@ title: "Multi-layered Cepstrum for Instantaneous Frequency Estimation"
 collection: publications
 category: conferences
 permalink: /publications/2018-11-26-multi-layered-cepstrum
-excerpt:
+excerpt: ""
 date: 2018-11-26
 venue: 'IEEE Global Conference on Signal and Information Processing (GlobalSIP)'
 paperurl: 'https://ieeexplore.ieee.org/document/8646684'

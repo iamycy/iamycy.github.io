@@ -3,7 +3,7 @@ title: "Differentiable All-pole Filters for Time-varying Audio Systems"
 collection: publications
 category: conferences
 permalink: /publications/2024-9-3-diffapf
-excerpt:
+excerpt: ""
 date: 2024-9-3
 venue: 'International Conference on Digital Audio Effects (DAFx)'
 paperurl: 'https://github.com/IoSR-Surrey/DAFx24-Proceedings/raw/main/papers/DAFx24_paper_75.pdf'

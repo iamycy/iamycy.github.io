@@ -3,7 +3,7 @@ title: "Harmonic Preserving Neural Networks for Efficient and Robust Multipitch 
 collection: publications
 category: conferences
 permalink: /publications/2020-12-10-harmonic-preserve-network
-excerpt:
+excerpt: ""
 date: 2020-12-10
 venue: 'Asia-Pacific Signal and Information Processing Association Annual Summit and Conference (APSIPA ASC)'
 paperurl: 'https://ieeexplore.ieee.org/abstract/document/9306345'
