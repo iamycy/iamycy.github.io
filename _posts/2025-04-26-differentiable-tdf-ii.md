@@ -86,7 +86,8 @@ $$
   -a_1[n] & 1 & 0 & \cdots & 0 \\
   -a_2[n] & 0 & 1 & \cdots & 0 \\
   \vdots & \vdots & \vdots & \ddots & \vdots \\
-  -a_M[n] & 0 & 0 & \cdots & 1
+  -a_{M-1}[n] & 0 & 0 & \cdots & 1 \\
+  -a_M[n] & 0 & 0 & \cdots & 0
 \end{bmatrix}
 $$
 
@@ -115,10 +116,11 @@ $$
 \mathbf{v}[n+1]
 =
 \begin{bmatrix}
-  -a_1[n] & -a_2[n] & \cdots & -a_M[n] \\
-  1 & 0 & \cdots & 0 \\
-  \vdots & \vdots & \ddots & \vdots \\
-  0 & 0 & \cdots & 1
+  -a_1[n] & -a_2[n] & \cdots & -a_{M-1}[n] & -a_M[n] \\
+  1 & 0 & \cdots & 0 & 0 \\
+  0 & 1 & \cdots & 0 & 0 \\
+  \vdots & \vdots & \ddots & \vdots & \vdots \\
+  0 & 0 & \cdots & 1 & 0
 \end{bmatrix}
 \mathbf{v}[n] +
 \begin{bmatrix}
