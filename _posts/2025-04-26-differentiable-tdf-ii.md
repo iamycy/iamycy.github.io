@@ -274,7 +274,7 @@ To do this, the following steps are needed:
 3. When doing backpropagation, filter the output gradients \\(\frac{\partial \mathcal{L}}{\partial y[n]}\\) through the DF-II filter's recusions in the opposite direction using the same **a** coefficients.
 4. Compute the gradients of the input and filter coefficients using the equations above. Note that although \\(\frac{\partial \mathcal{L}}{\partial \mathbf{z}[n]}\\) is a sequence of vectors, since the higher-order states in DF-II are just time-delayed versions of the first state (\\(v_M[n] = v_{M-1}[n-1] = \cdots = v_1[n-M+1]\\)), we can just store \\(\frac{\partial \mathcal{L}}{\partial z_1[n]}\\) for gradient computation, reducing the memory usage by a factor of \\(M\\).
 
-### Final thoughts
+## Final thoughts
 The procedure above can be applied to derive the gradients DF-II filter as well.
 The resulting algorithm is identical but the roles of TDF-II and DF-II are swapped.
 Personally I found using state-space formulation is much easier, straightforward, and elegant than the [derivation I did in 2024](/publications/2024-9-3-diffapf) to calculate the gradients of time-varying all-pole filters, which is basically the same problem.
