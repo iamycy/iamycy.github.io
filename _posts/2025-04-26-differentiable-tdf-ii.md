@@ -12,13 +12,13 @@ This blog is a continuation of some of my early calculations for propagating gra
 
 ## Back story
 
-In the early 2021, I made an implementation of a differentiable `lfilter` function for `torchaudio` (a few core details were published two years later [here](/publications/2023-11-4-golf)). 
-The basic idea is implementing the backpropagation of gradients in C++ for optimal performance.
+In early 2021, I implemented a differentiable `lfilter` function for `torchaudio` (a few core details were published two years later [here](/publications/2023-11-4-golf)). 
+The basic idea is to implement the backpropagation of gradients in C++ for optimal performance.
 The implementation was based on Direct-Form-I (DF-I).
-This is different from the popular implementation of SciPy's `lfilter`, which is based on Transposed-Direct-Form-II (TDF-II) and more numerically stable[^1].
+This differs from the popular implementation of SciPy's `lfilter`, which is based on Transposed-Direct-Form-II (TDF-II) and is more numerically stable[^1].
 
-It'll be better to implement it in this form, but... at the time, my knowledge base was not enough to generalise the idea to TDF-II.
-In DF-I/II, the gradients of FIR and all-pole filters can be treated independently so I was only working on the recursive part of the filter (the all-pole).
+Implementing it in this form would be better, but... at the time, my knowledge base was insufficient to generalise the idea to TDF-II.
+In DF-I/II, the gradients of FIR and all-pole filters can be treated independently, so I worked only on the recursive part of the filter (the all-pole).
 
 <div style="display: flex; justify-content: space-between;">
   <div style="width: 55%;">
@@ -36,13 +36,13 @@ I left this as a TODO for the future[^2].
 
 Many things have changed since then.
 I started my PhD in 2022 and have more time to think thoroughly about the problem.
-My understanding of filters also improved a bit after exploring the filter idea a few times with some publications.
+My understanding of filters improved after exploring the idea with some publications a few times.
 It's time to revisit the problem, a differentiable TDF-II filter.
 
 **TL;DR**, *the backpropagation of TDF-II filter is a DF-II filter, and vice versa.*
 
-The following calucation consider the a general case when the filters parameters are **time-varying**.
-Time-invariant systems are a special case of this and is trivial once we have the time-varying results.
+The following calculation considers the general case when the filter parameters are **time-varying**.
+Time-invariant systems are a special case and are trivial once we have the time-varying results.
 
 
 ## (Transposed-)Direct-Form II
@@ -138,9 +138,9 @@ y[n] = \mathbf{B}^\top[n] \mathbf{v}[n] + b_0[n] x[n].
 $$
 
 As I have shown above, the forms are very similar.
-The transition matrix of TDF-II is the transpose of the DF-II and the vectors **B** and **C** are swapped.
+The transition matrix of TDF-II is the transpose of the DF-II, and the vectors **B** and **C** are swapped.
 (This is the reason why we call it transposed-DF-II.)
-Note that the resulting transfer function is not the same due to the difference in computation order in time-varying case.
+Note that the resulting transfer function is not the same due to the difference in computation order in the time-varying case.
 (They are the same if the coefficients are time-invariant!)
 I will use the state-space form for simplicity in the following sections.
 
@@ -162,7 +162,7 @@ $$
 \mathbf{s}[n+1] = \sum_{i=1}^{\infty} \left(\prod_{j=1}^{i} \mathbf{A}[n-j+1]\right) \mathbf{z}[n-i] + \mathbf{z}[n].
 $$ 
 
-The gradients with respect to **z** can be computed as:
+The gradients for **z** can be computed as:
 
 $$
 \frac{\partial \mathbf{s}[n]}{\partial \mathbf{z}[i]} 
@@ -195,11 +195,11 @@ $$
 = \mathbf{A}^\top[n+1] \frac{\partial \mathcal{L}}{\partial \mathbf{z}[n+1]} + \frac{\partial \mathcal{L}}{\partial \mathbf{s}[n+1]}.
 $$
 
-I omitted the transpose sign for the vector for simplicity.
-The last recursion involves \\(\mathbf{A}^\top\\), implies that, to backpropagate the gradients through the recursion of TDF-II, we need to use the **recursion of DF-II but in the opposite direction**!
+For simplicity, I omitted the transpose sign for the vector.
+The last recursion involves \\(\mathbf{A}^\top\\), which implies that, to backpropagate the gradients through the recursion of TDF-II, we need to use the **recursion of DF-II but in the opposite direction**!
 Their roles will be swapped if we compute the gradients of DF-II using the same procedure, but I'll leave it as an exercise for the reader :D
 
-For completeness, the following are the procedure to compute the gradients of the input and filter coefficients.
+For completeness, the following are the procedures to compute the gradients of the input and filter coefficients.
 
 ### Gradients of the input
 
@@ -219,7 +219,7 @@ $$
 = \mathbf{A}^\top[n+1] \frac{\partial \mathcal{L}}{\partial \mathbf{z}[n+1]} + \mathbf{C}^\top[n+1] \frac{\partial \mathcal{L}}{\partial y[n+1]}
 $$
 
-(Note that the above line is the same as the one in DF-II! Just the input and output variables are changed.)
+(Note that the above line is the same as in DF-II! Just the input and output variables are changed.)
 
 $$
 \frac{\partial \mathcal{L}}{\partial x[n]}
@@ -259,7 +259,7 @@ $$
 b_i[n] = b_i[m] \quad \forall n, m, \quad i = 0, \dots, M
 $$
 
-In this case, we can just simply sum the gradients over time:
+In this case, we can just sum the gradients over time:
 
 $$
 \frac{\partial \mathcal{L}}{\partial a_i} = \sum_{n} \frac{\partial \mathcal{L}}{\partial a_i[n]},~\ \frac{\partial \mathcal{L}}{\partial b_i} = \sum_{n} \frac{\partial \mathcal{L}}{\partial b_i[n]}.
@@ -268,7 +268,7 @@ $$
 
 ## Summary
 
-The above findings suggest a way to compute the gradients of TDF-II filter efficiently.
+The above findings suggest a way to compute the TDF-II filter's gradients efficiently.
 To do this, the following steps are needed:
 
 1. Implement the recursions of TDF-II and DF-II filters in C++/CUDA/Metal/etc.
@@ -277,19 +277,19 @@ To do this, the following steps are needed:
 4. Compute the gradients of the input and filter coefficients using the equations above. Note that although \\(\frac{\partial \mathcal{L}}{\partial \mathbf{z}[n]}\\) is a sequence of vectors, since the higher-order states in DF-II are just time-delayed versions of the first state (\\(v_M[n] = v_{M-1}[n-1] = \cdots = v_1[n-M+1]\\)), we can just store \\(\frac{\partial \mathcal{L}}{\partial z_1[n]}\\) for gradient computation, reducing the memory usage by a factor of \\(M\\).
 
 ## Final thoughts
-The procedure above can be applied to derive the gradients DF-II filter as well.
-The resulting algorithm is identical but the roles of TDF-II and DF-II are swapped.
-Personally I found using state-space formulation is much easier, straightforward, and elegant than the [derivation I did in 2024](/publications/2024-9-3-diffapf) to calculate the gradients of time-varying all-pole filters, which is basically the same problem.
-(Man, I was basically bruteforcing it...)
-Applying the method to TDF-I is straightfowrad, just set \\(\\mathbf{B}[n] = 0\\).
+The procedure above can be applied to derive the gradients of the DF-II filter as well.
+The resulting algorithm is identical, but the roles of TDF-II and DF-II are swapped.
+Personally, I found using a state-space formulation much easier, straightforward, and elegant than the [derivation I did in 2024](/publications/2024-9-3-diffapf) to calculate the gradients of time-varying all-pole filters, which is basically the same problem.
+(Man, I was basically brute-forcing it...)
+Applying the method to TDF-I is straightforward, just set \\(\\mathbf{B}[n] = 0\\).
 
-Interestingly, since the backpropagation of TDF-II is a DF-II filter, which means it's less numerically stable than TDF-II; in contrast, the backpropagation of DF-II is a TDF-II filter and is more stable.
-We'll always have this trade-off, so is it really necessary to have TDF-II if we want differentiability?
-Probably yes, since besides backpropagation, the gradients can also be computed using **forward-mode** automatic differentiation, which basically computes the Jacobian from an opposite direction.
+Interestingly, since the backpropagation of TDF-II is a DF-II filter, it's less numerically stable than TDF-II; in contrast, the backpropagation of DF-II is a TDF-II filter and is more stable.
+We'll always have this trade-off, so is TDF-II necessary if we want differentiability?
+Probably yes, since besides backpropagation, the gradients can also be computed using **forward-mode** automatic differentiation, which computes the Jacobian in the opposite direction.
 In this way, the forwarded gradients are computed in the same way as the filter's forward pass, and the math is much easier to show than the backpropagation I wrote above. (Should realise earlier...)
-Also, in the time-varying case and \\(M > 1\\), none of the two forms guarantee BIBO stability.
-This is a another interesting topic but let's just leave it for now.
-I hope this post is useful for those who are interested in differentiable IIR filters.
+Also, in the time-varying case and \\(M > 1\\), neither of the two forms guarantees BIBO stability.
+This is another interesting topic, but let's just leave it for now.
+I hope this post is helpful for those who are interested in differentiable IIR filters.
 
 ## Notes
 
