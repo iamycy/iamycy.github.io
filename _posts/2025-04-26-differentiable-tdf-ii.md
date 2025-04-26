@@ -214,7 +214,7 @@ $$
 
 $$
 \frac{\partial \mathcal{L}}{\partial \mathbf{z}[n]}
-= \mathbf{A}^\top[n+1] \frac{\partial \mathcal{L}}{\partial \mathbf{z}[n+1]} + \mathbf{C}^\top[n] \frac{\partial \mathcal{L}}{\partial y[n]}
+= \mathbf{A}^\top[n+1] \frac{\partial \mathcal{L}}{\partial \mathbf{z}[n+1]} + \mathbf{C}^\top[n+1] \frac{\partial \mathcal{L}}{\partial y[n+1]}
 $$
 
 (Note that the above line is the same as the one in DF-II! Just the input and output variables are changed.)
