@@ -138,7 +138,7 @@ y[n] = \mathbf{B}^\top[n] \mathbf{v}[n] + b_0[n] x[n].
 $$
 
 As I have shown above, the forms are very similar.
-The transition matrix of TDF-II is the transpose of the DF-II and the column vectors **B** and **C** are swapped.
+The transition matrix of TDF-II is the transpose of the DF-II and the vectors **B** and **C** are swapped.
 (This is the reason why we call it transposed-DF-II.)
 Note that the resulting transfer function is not the same due to the difference in computation order in time-varying case.
 (They are the same if the coefficients are time-invariant!)
