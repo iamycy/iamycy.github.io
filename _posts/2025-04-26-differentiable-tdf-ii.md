@@ -266,7 +266,7 @@ $$
 
 ## Summary
 
-The above findgins suggest a way to compute the gradients of TDF-II filter efficiently.
+The above findings suggest a way to compute the gradients of TDF-II filter efficiently.
 To do this, the following steps are needed:
 
 1. Implement the recursions of TDF-II and DF-II filters in C++/CUDA/Metal/etc.
