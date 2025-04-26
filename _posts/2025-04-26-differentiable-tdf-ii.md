@@ -97,7 +97,7 @@ $$
 \end{bmatrix}.
 $$
 
-The values of \\(\\mathbf{B}[n] \\) can be referred from Julius' blog[^4].
+The values of \\(\\mathbf{B}[n] \\) can be referred from Julius' blog[^3].
 
 Regarding DF-II, its difference equations are:
 
@@ -291,7 +291,7 @@ I hope this post is useful for those who are interested in differentiable IIR fi
 
 ## Notes
 
-The figures are from [Julius O. Smith III](https://ccrma.stanford.edu/~jos/filters/Implementation_Structures_Recursive_Digital.html) and the notations are adapted from his blog[^4].
+The figures are from [Julius O. Smith III](https://ccrma.stanford.edu/~jos/filters/Implementation_Structures_Recursive_Digital.html) and the notations are adapted from his blog[^3].
 The algorithm is based on the following papers:
 
 1. Singing Voice Synthesis Using Differentiable LPC and Glottal-Flow-Inspired Wavetables (doi: 10.5281/zenodo.13916489)
@@ -305,5 +305,4 @@ The algorithm is based on the following papers:
 
 [^1]: https://ccrma.stanford.edu/~jos/filters/Numerical_Robustness_TDF_II.html
 [^2]: https://github.com/pytorch/audio/pull/1310#issuecomment-790408467
-[^3]: https://transactions.ismir.net/articles/10.5334/tismir.210
-[^4]: https://ccrma.stanford.edu/~jos/fp/Converting_State_Space_Form_Hand.html
+[^3]: https://ccrma.stanford.edu/~jos/fp/Converting_State_Space_Form_Hand.html
