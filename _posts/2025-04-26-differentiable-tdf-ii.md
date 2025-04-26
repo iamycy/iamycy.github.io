@@ -29,7 +29,7 @@ In DF-I/II, the gradients of FIR and all-pole filters can be treated independent
   </div>
 </div>
 
-However, in TDF-II, now the two parts are combined and the registers are shared, so my previous approach does not work.
+However, in TDF-II, the two parts are combined and the registers are shared, so my previous approach does not work.
 I left this as a TODO for the future[^2].
 
 <img src="https://ccrma.stanford.edu/~jos/filters/img1147_2x.png" alt="DF-I" style="width: 50%; height: auto;"/>
