@@ -103,7 +103,7 @@ The values of \\(\\mathbf{B}[n] \\) can be referred from Julius' blog[^3].
 Regarding DF-II, its difference equations are:
 
 $$
-v[n] = x[n] - \sum_{i=1}^{M} a_i[n] s[n-i]
+v[n] = x[n] - \sum_{i=1}^{M} a_i[n] v[n-i]
 $$
 
 $$
