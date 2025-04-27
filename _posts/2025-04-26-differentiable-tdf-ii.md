@@ -45,7 +45,7 @@ The following calculation considers the general case when the filter parameters 
 Time-invariant systems are a special case and are trivial once we have the time-varying results.
 
 
-## (Transposed-)Direct-Form II
+## (Transposed-)Direct-Form-II
 Given time-varying coefficients \\(\\{b_0[n], b_1[n],\dots,b_M[n]\\}\\) and \\(\\{a_1[n],\dots,a_N[n]\\}\\), the TDF-II filter can be expressed as:
 
 $$
