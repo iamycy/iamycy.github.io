@@ -205,7 +205,7 @@ For completeness, the following are the procedures to compute the gradients of t
 
 $$
 \frac{\partial \mathcal{L}}{\partial \mathbf{s}[n]} 
-= \mathbf{C}^\top[n] \frac{\partial \mathcal{L}}{\partial y[n]}
+= \mathbf{C}^\top \frac{\partial \mathcal{L}}{\partial y[n]}
 % \begin{bmatrix}
 %   \frac{\partial \mathcal{L}}{\partial y[n]} \\
 %   0 \\
@@ -216,7 +216,7 @@ $$
 
 $$
 \frac{\partial \mathcal{L}}{\partial \mathbf{z}[n]}
-= \mathbf{A}^\top[n+1] \frac{\partial \mathcal{L}}{\partial \mathbf{z}[n+1]} + \mathbf{C}^\top[n+1] \frac{\partial \mathcal{L}}{\partial y[n+1]}
+= \mathbf{A}^\top[n+1] \frac{\partial \mathcal{L}}{\partial \mathbf{z}[n+1]} + \mathbf{C}^\top \frac{\partial \mathcal{L}}{\partial y[n+1]}
 $$
 
 (Note that the above line is the same as in DF-II! Just the input and output variables are changed.)
