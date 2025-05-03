@@ -16,30 +16,30 @@ Education
 
 Work experience
 ======
-* Summer 2017: Intern
-  * Institute of Information Science, Academia Sinica, Taipei, Taiwan
-  * Duties include: Developing Cepstrum-Based Music Transcription System
-  * Supervisor: Professor Li Su
+* Summer 2024 - Winter 2024: Research Intern
+  * Sony AI, Sony, Tokyo, Japan
+  * Duties include: differentiable audio processing and audio mixing
+  * Supervisor: Manager Weih Siang Liao
+
+* Winter 2020 - Summer 2022: Backend Engineer
+  * Backend R&D, Rayark Inc., Taipei, Taiwan
+  * Duties include: Design and implement mobile game servers
+  * Supervisor: CTO Alvin
+
+* Summer 2019 - Winter 2020: Engineer
+  * Vive R&D, HTC, New Taipei City, Taiwan
+  * Duties include: Applying Deep Learning Techniques on HRTF applications
+  * Supervisor: VP Vasco Choi
 
 * 2018: Research Assistant
   * Institute of Information Science, Academia Sinica, Taipei, Taiwan
   * Duties include: Doing Research on NN-based Vocoder Model/Developing End-to-End Music Transcription Model
   * Supervisor: Professor Li Su
 
-* Summer 2019 - Winter 2020: Engineer
-  * Vive R&D, HTC, New Taipei City, Taiwan
-  * Duties include: Applying Deep Learning Techniques on HRTF applications
-  * Supervisor: VP Vasco Choi
-  
-* Winter 2020 - Summer 2022: Backend Engineer
-  * Backend R&D, Rayark Inc., Taipei, Taiwan
-  * Duties include: Design and implement mobile game servers
-  * Supervisor: CTO Alvin
-
-* Summer 2024 - Winter 2024: Research Intern
-  * Sony AI, Sony, Tokyo, Japan
-  * Duties include: differentiable audio processing and audio mixing
-  * Supervisor: Manager Weih Siang Liao
+* Summer 2017: Intern
+  * Institute of Information Science, Academia Sinica, Taipei, Taiwan
+  * Duties include: Developing Cepstrum-Based Music Transcription System
+  * Supervisor: Professor Li Su
 
 
 Skills
