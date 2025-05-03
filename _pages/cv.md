@@ -11,8 +11,8 @@ redirect_from:
 
 Education
 ======
-* B.S. in Computer Science, National Chiao Tung University, Taiwan, 2018
-* Ph.D in Electronic Engineering and Computer Science, Queen Mary University of London, UK, 2026 (expected)
+* Ph.D in Electronic Engineering and Computer Science, Queen Mary University of London, UK, 2022 ~ 2026 (expected)
+* B.S. in Computer Science, National Chiao Tung University, Taiwan, 2014 ~ 2018
 
 Work experience
 ======
@@ -67,6 +67,21 @@ Skills
   * Piano
   * Violin
   * Electric Guitar
+
+Demonstration
+======
+* 2025 Semester B, ECS515U - Signals and Systems Theory
+  * Queen Mary University of London, UK
+  * Module Organiser: Dr. Maged Elkashlan
+
+* 2024 Semester B, ECS7006P - Music Informatics
+  * Queen Mary University of London, UK
+  * Module Organiser: Prof. Simon Dixon
+
+* 2023 Semester A, ECS602U/ECS707P - Digital Signal Processing
+  * Queen Mary University of London, UK
+  * Module Organiser: Dr. Luk Arnaut
+
 
 Publications
 ======
