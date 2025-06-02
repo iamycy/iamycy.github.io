@@ -223,8 +223,7 @@ $$
 
 $$
 \frac{\partial \mathcal{L}}{\partial x[n]}
-= \frac{\partial \mathcal{L}}{\partial \mathbf{z}^\top}[n] \mathbf{B}[n]
-+ \frac{\partial \mathcal{L}}{\partial y[n]} b_0[n]
+= \frac{\partial \mathcal{L}}{\partial \mathbf{z}^\top[n]} \mathbf{B}[n] + \frac{\partial \mathcal{L}}{\partial y[n]} b_0[n]
 $$
 
 
