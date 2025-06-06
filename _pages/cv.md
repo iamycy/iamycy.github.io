@@ -81,6 +81,20 @@ Demonstration
 * 2023 Semester A, ECS602U/ECS707P - Digital Signal Processing
   * Queen Mary University of London, UK
   * Module Organiser: Dr. Luk Arnaut
+ 
+Peer-reviewed
+======
+* 2025
+  * ICASSP
+  * ISMIR
+  * AES AIMLA
+* 2024
+  * ICASSP
+  * AAAI
+  * IEEE TASLP x1
+  * IEEE SPL x1
+* 2023
+  * AAAI
 
 
 Publications
