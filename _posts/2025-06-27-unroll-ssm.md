@@ -225,4 +225,13 @@ State-Space All-Pole Filter
   IQR:    1.47 ms (114.87 to 116.34)
   9 measurements, 1 runs per measurement, 4 threads
 ```
+
 Interesting, the SSM implementation is actually faster by about 30 ms!
+
+By using `torch.profiler.profile`, I found that `torch.cat` for updating the last M outputs takes a significant amount of the total time (~20%).
+The actual computation, `torch.addmv`, actually takes only about 10%.
+Regarding the memory usage, the most memory-consuming operation is `torch.addmv`, which uses about 512 Kb of memory.
+In contrast, the SSM implementation uses more memory (> 1 Mb) due to the matrix multiplication, but now roughly 38% of the time is spent on filtering since it doesn't have to call `torch.cat` at each time step anymore.
+The state vecotr (a.k.a the last M outputs) automatically get updated during the matrix multiplication.
+
+**Conclusion**: tensor concatenation (including `torch.cat` and `torch.stack`) is expensive, and we should avoid it if possible.
