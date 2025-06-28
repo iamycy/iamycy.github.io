@@ -6,31 +6,31 @@ tags:
   - differentiable IIR
   - scientific computing
   - pytorch
-  - state space model
+  - state-space model
 ---
 
-I recently came across a presentation by Andres Ezequiel Viso from GPU Audio at ADC 2022, which he talked about how they accelerate IIR filters on the GPU.
-The approach they make use of is instead of running sample-by-sample, they formulate the IIR filter as a state space model (SSM) and augment the transition matrix so each step processes multiple samples at once.
-The main speedup comes from the fact that GPU is really good at performing large matrix multiplications, and the SSM formulation allows us to take advantage of that.
+I recently came across a presentation by Andres Ezequiel Viso from GPU Audio at ADC 2022, in which he talked about how they accelerate IIR filters on the GPU.
+The approach they use is to formulate the IIR filter as a state-space model (SSM) and augment the transition matrix so that each step processes multiple samples at once.
+The primary speedup stems from the fact that GPUs are very good at performing large matrix multiplications, and the SSM formulation enables us to leverage this capability.
 
 <iframe width="1024px" height="576px"
 src="https://www.youtube.com/embed/UmYnoFo0Bb8?start=1356"
 allowfullscreen>
 </iframe><br>
 
-Speed up IIR filters while maintaining differentiability has always been my interest.
+Speeding up IIR filters while maintaining differentiability has always been my interest.
 The most recent method I worked on is from my recent [submission](https://arxiv.org/abs/2504.14735) to DAFx 25, where my co-author Ben proposed using parallel associative scan to speed up the recursion on the GPU.
-Nevertheless, since PyTorch does not have a built-in associative scan operator (compared to JAX), we have to implement custom kernels for it, which is non-trivial.
-It also requires that the filter has distinct poles so the state space transition matrix is diagonalisable.
-The method that GPU Audio presented seems to be doable solely using PyTorch Python API and doesn't have the restrctions I mentioned, thus I decided to benchmark it and see how it performs.
+Nevertheless, since PyTorch does not have a built-in associative scan operator (in contrast to JAX), we must implement custom kernels for it, which is non-trivial.
+It also requires that the filter has distinct poles so that the state-space transition matrix is diagonalisable.
+The method that GPU Audio presented appears to be feasible solely using the PyTorch Python API and doesn't have the restrictions I mentioned; thus, I decided to benchmark it and see how it performs.
 
 Since it's just a proof of concept, the filter I'm going to test is a **time-invariant all-pole IIR filter**, which is the minimal case of a recursive filter.
-This does let us to leverage some special optimisations that won't work on time-varying general IIR filters, but that won't affect the main idea I'm going to present here.
+This allows us to leverage some special optimisations that won't work with time-varying general IIR filters, but that won't affect the main idea I'm going to present here.
 
 
 ## Naive implementation of an all-pole IIR filter
 
-The difference equation of a \\(M\\)-th order all-pole IIR filter is given by:
+The difference equation of an \\(M\\)-th order all-pole IIR filter is given by:
 
 $$
 y[n] = x[n] -\sum_{m=1}^{M} a_m y[n-m].
@@ -73,17 +73,18 @@ def naive_allpole(x: Tensor, a: Tensor) -> Tensor:
     return torch.stack(output, dim=1)
 ```
 
-In this implementation I didn't use any in-place operations for speedup since it would break the differentiability of the function.
-This naive implementation is not very efficient since `torch.addmv` and `torch.cat` are called at each time step, and usually the audio signal is hundreds of thousands of samples long, creating a lot of function call overhead.
-For details please refer to my [tutorial on differentiable IIR filters](https://intro2ddsp.github.io/filters/iir_torch.html) at ISMIR 2023.
+In this implementation, I didn't use any in-place operations for speedup since it would break the differentiability of the function.
+This naive implementation is not very efficient, as `torch.addmv` and `torch.cat` are called at each time step. 
+Typically, the audio signal is hundreds of thousands of samples long, resulting in a significant amount of function call overhead.
+For details, please take a look at my [tutorial on differentiable IIR filters](https://intro2ddsp.github.io/filters/iir_torch.html) at ISMIR 2023.
 
 Notice that I used `torch.jit.script` to compile the function for some slight speedup.
-I tried the newer compilation feature `torch.compile` but it didn't work.
-The compilation just hangs forever I don't know why...
-Personally I never found `torch.compile` to be useful in my research projects, and `torch.jit.*` has proven to be way more reliable.
+I tried the newer compilation feature `torch.compile`, but it didn't work.
+The compilation hangs forever, I don't know why...
+I never found `torch.compile` to be useful in my research projects, and `torch.jit.*` has proven to be way more reliable.
 
-Let's benchmark the speed of it on my Ubuntu with an Intel i7-7700K.
-We'll use a batch size of 8, a signal length of 16384, and \\(M=2\\), which is a common setting for audio processing.
+Let's benchmark its speed on my Ubuntu with an Intel i7-7700K.
+We'll use a batch size of 8, a signal length of 16384, and \\(M=2\\), which is a reasonable setting for audio processing.
 
 ```python
 from torch.utils.benchmark import Timer
@@ -119,11 +120,11 @@ Naive All-Pole Filter
   6 measurements, 1 runs per measurement, 4 threads
 ```
 
-165.85 ms is quite slow, but it is expected.
+165.85 ms is relatively slow, but it is expected.
 
-## State space model formulation
+## state-space model formulation
 
-Before we proceed to showing the sample unrolling trick, let's first introduce the state space model (SSM) formulation of the all-pole IIR filter.
+Before we proceed to showing the sample unrolling trick, let's first introduce the state-space model (SSM) formulation of the all-pole IIR filter.
 The model is similar to the one used in the [TDF-II filter](https://iamycy.github.io/posts/2025/04/differentiable-tdf-ii/):
 
 $$
@@ -147,7 +148,7 @@ y[n] &= \mathbf{B}^\top \mathbf{h}[n].
 \end{align}
 $$
 
-Here I simplified the original SSM a bit by omitting the direct path since we can derive it from the state vector (for all-pole filter only).
+Here, I simplified the original SSM by omitting the direct path, as it can be derived from the state vector (for the all-pole filter only).
 Here's the PyTorch implementation of it:
 
 ```python
@@ -204,8 +205,8 @@ def state_space_allpole(x: Tensor, a: Tensor) -> Tensor:
 `a2companion` converts the all-pole coefficients to a [companion matrix](https://en.wikipedia.org/wiki/Companion_matrix), which is \\(\\mathbf{A}\\) in the SSM formulation.
 
 Before we benchmark the speed of this implementation, let's predict how fast it will be.
-Intuitively, since the complexity of vector-dot product is \\(O(M)\\) and matrix-vector multiplication is \\(O(M^2)\\), the SSM implementation use more computational resources so it should be slower than the naive implementation.
-Let's benchmark the speed of it:
+Intuitively, since the complexity of vector-dot product is \\(O(M)\\) and matrix-vector multiplication is \\(O(M^2)\\), the SSM implementation uses more computational resources, so it should be slower than the naive implementation.
+Let's benchmark its speed:
 
 ```python
 state_space_allpole_t = Timer(
@@ -226,21 +227,21 @@ State-Space All-Pole Filter
   9 measurements, 1 runs per measurement, 4 threads
 ```
 
-Interesting, the SSM implementation is actually faster by about 30 ms!
+Interestingly, the SSM implementation is approximately 30 ms faster.
 
-By using `torch.profiler.profile`, I found that, in the naive implementation, `torch.cat` for updating the last M outputs takes a significant amount of the total time (~20%).
-The actual computation, `torch.addmv`, takes only about 10%.
-Regarding the memory usage, the most memory-consuming operation is `torch.addmv`, which uses about 512 Kb of memory.
-In contrast, the SSM implementation uses more memory (> 1 Mb) due to the matrix multiplication, but roughly 38% of the time is spent on filtering since it doesn't have to call `torch.cat` at each time step anymore.
-The state vector (a.k.a the last M outputs) automatically get updated during the matrix multiplication.
+By using `torch.profiler.profile`, I found that, in the naive implementation, `torch.cat` for updating the last M outputs accounts for a significant portion of the total time (~20%).
+The actual computation, `torch.addmv`, takes only about 10% of the time.
+Regarding memory usage, the most memory-intensive operation is `torch.addmv`, which consumes approximately 512 Kb of memory.
+In contrast, the SSM implementation uses more memory (> 1 Mb) due to matrix multiplication, but roughly 38% of the time is spent on filtering since it no longer has to call `torch.cat` at each time step.
+The state vector (a.k.a the last M outputs) is automatically updated during the matrix multiplication.
 
-**Conclusion**: tensor concatenation (including `torch.cat` and `torch.stack`) is expensive, and we should avoid it if possible.
+**Conclusion**: Tensor concatenation (including `torch.cat` and `torch.stack`) is computationally expensive, and it is advisable to avoid it whenever possible.
 
 
 ## Unrolling the SSM
 
 Now we can apply the unrolling trick to the SSM implementation.
-The idea is to divide the input signal into blocks of size \\(T\\) and perform the recursion on the blocks instead of sample-by-sample.
+The idea is to divide the input signal into blocks of size \\(T\\) and perform the recursion on these blocks instead of processing them sample-by-sample.
 Each recursion takes the last vector state \\(\\mathbf{h}[n-1]\\) and predicts the next \\(T\\) states \\([\\mathbf{h}[n], \mathbf{h}[n+1], \ldots, \mathbf{h}[n+T-1]]^\top\\) at once.
 To see how to calculate these states, let's unroll the SSM recursion for \\(T\\) steps:
 
@@ -312,13 +313,13 @@ $$
 \end{align}
 $$
 
-Notice that in the second line, I utilised the fact the \\(\mathbf{B}\\) has only one non-zero entry to simplify the matrix.
+Notice that in the second line, I utilised the fact that \\(\mathbf{B}\\) has only one non-zero entry to simplify the matrix.
 (This is not possible if the filter is not strictly all-pole.)
 \\(\mathbf{I}_{.1}\\) denotes the first column of the identity matrix and so on.
 
 Now, the number of autoregressive steps is reduced from \\(T\\) to \\(\\frac{N}{T}\\) and the matrix multiplication is done in parallel for every \\(T\\) samples.
 There are added costs for pre-computing the transition matrix \\(\mathbf{M}\\) and the input matrix \\(\mathbf{V}\\), though.
-However, as long as the extra cost is relatively small compared to the cost of \\(T\\) autoregressive steps, we should see a speedup.
+However, as long as the extra cost is relatively small compared to the cost of \\(T\\) autoregressive steps, we should observe a speedup.
 
 Here's the PyTorch implementation of the unrolled SSM:
 
@@ -383,8 +384,8 @@ def state_space_allpole_unrolled(
     return torch.cat(output, dim=1)
 ```
 
-The `unroll_factor` parameter controls how many samples to process in parallel.
-If it is set to 1, the function behaves like the original SSM implementation.
+The `unroll_factor` parameter controls the number of samples to process in parallel.
+If it is set to 1, the function is the original SSM implementation.
 
 Now let's benchmark the speed of the unrolled SSM implementation.
 We'll use `unroll_factor=128` since I already tested that it is the optimal value :)
@@ -413,31 +414,31 @@ State-Space All-Pole Filter Unrolled
 ```
 1.89 ms! What sorcery is this? That's a whopping 60x speedup compared to the standard SSM implementation!
 
-A closer look at the profiling results shows in total 25% of the time is spent on matrix multiplication and addition.
+A closer look at the profiling results shows that in total, 25% of the time is spent on matrix multiplication and addition.
 Interestingly, around 30% of the time is spent on the `torch.flip` operation for preparing the input matrix \\(\mathbf{V}\\).
-The speedup does comes with a cost of more memory usage, requiring more than 2 Mb for filtering.
-Honestly, not a significant cost for modern Hardwares.
+The speedup comes with a cost of increased memory usage, requiring more than 2 MB for filtering.
+Not a significant cost for modern Hardwares.
 
-Notice that for convenience I ran the above benchmarks using CPU, which has very limited parallelism compared to GPU.
-Thus, the huge speedup we see tells us that function call overhead is the major bottleneck for running recursions.
+For convenience, I ran the above benchmarks using the CPU, which has very limited parallelism compared to the GPU.
+Thus, the significant speedup we observe indicates that function call overhead is the major bottleneck for running recursions.
 
 
 ## More comparison
 
-Since \\(T\\) is an important parameter for the unrolled SSM, I did some more benchmarks to see how it affects the speed.
+Since \\(T\\) is an essential parameter for the unrolled SSM, I did some benchmarks to see how it affects the speed.
 
 ### Varying sequence length
 
 In this benchmark, I fixed the batch size to 8 and the order to 2, and varied the sequence length from 4096 to 262144.
-The results suggest that the best unroll factor increase as the sequence length increases, and it's very likely to be \\(\\sqrt{N}\\).
-Also, the longer the sequence length, the more speedup we get from the unrolled SSM.
+The results suggest that the best unroll factor increases as the sequence length increases, and it's very likely to be \\(\\sqrt{N}\\).
+Additionally, the longer the sequence length, the greater the speedup we achieve from the unrolled SSM.
 
 ![](/images/unroll-ssm/benchmark_seq_len.png)
 
 ### Varying filter order
 
-To see how the filter order affects the speed, I fixed the batch size to 8 and the sequence length to 16384, and varied the filter order from 2 to 16.
-It looks like my hypothesis that the best factor is \\(\\sqrt{M}\\) still holds, but the peak gradually shifts to the left as the order increases.
+To examine the impact of filter order on speed, I set the batch size to 8 and the sequence length to 16384, and then varied the filter order from 2 to 16.
+It appears that my hypothesis that the best factor is \\(\\sqrt{M}\\) still holds, but the peak gradually shifts to the left as the order increases.
 Moreover, the speedup is less significant for higher orders, which is expected as the \\(\mathbf{V}\\) matrix becomes larger.
 
 ![](/images/unroll-ssm/benchmark_order.png)
@@ -445,48 +446,48 @@ Moreover, the speedup is less significant for higher orders, which is expected a
 ### Varying batch size
 
 The speedup is less as the batch size increases, which is expected.
-However, the peak of the best unroll factor also leans towards the left a bit when the batch size increases.
+However, the peak of the best unroll factor also shifts slightly to the left as the batch size increases.
 
 ![](/images/unroll-ssm/benchmark_batch.png)
 
 ### Memory usage
 
-To see how the memory usage changes in a differentiable training context, I ran the unrolled SSM on a 5060 ti so I can use `torch.cuda.max_memory_allocated()` to measure the memory usage.
+To observe how memory usage changes in a differentiable training context, I ran the unrolled SSM on a 5060 Ti, allowing me to use `torch.cuda.max_memory_allocated()` to measure memory usage.
 When batch size is 1, as expected, the memory usage grows quadratically with the unroll factor, due to the creation of the \\(\mathbf{V}\\) matrix.
 
 ![](/images/unroll-ssm/mem_batch_1.png)
 
-However, when using a larger batch size (32 in this case), this cost becomes less significant compared to more memory used for the input signal.
+When using a larger batch size (32 in this case), this cost becomes less significant compared to the more memory used for the input signal.
 
 ![](/images/unroll-ssm/mem_batch_32.png)
 
 
 ## Discussion
 
-So far we have seen that the unrolled SSM can achieve a significant speedup for IIR filtering in PyTorch.
-However, how to automatically determine the best unrolling factor is still not clear.
+So far, we have seen that the unrolled SSM can achieve a significant speedup for IIR filtering in PyTorch.
+However, determining the best unrolling factor automatically is still unclear.
 From the benchmarks I did on an i7 CPU, it seems that the optimal \\(T^*\\) is \\(\sqrt{N}\alpha\\) and \\(0 < \alpha \leq 1\\) is given by a function of the filter order and batch size.
 However, this may not hold for other hardware.
 
-One thing I didn't mention is about numerical accuracy.
+One thing I didn't mention is numerical accuracy.
 If \\(|\mathbf{A}|\\) is very small, the precomputed exponentials \\(\mathbf{A}^T \to \mathbf{0}\\) which may not be accurately represented in floating point, especially in deep learning applications we use single precision a lot.
-This is less of a problem for the standard SSM since at each time step the input mixed with the state vector, thus could help cancel out the numerical errors.
+This is less of a problem for the standard SSM, since at each time step, the input is mixed with the state vector, which could help cancel out the numerical errors.
 
 The idea should apply when there are zeros in the filter.
 \\(\\mathbf{B}\\) will not be a simple one-hot vector anymore so \\(\mathbf{V}\\) has to be a full \\(MT\\times MT\\) square matrix.
-Time-varying filters will benefit less from the unrolling trick since \\(\mathbf{V}\\) will also be time-varying, and computing \\(\frac{N}{T}\\) such matrices in advance increase the cost a lot.
+Time-varying filters will benefit less from the unrolling trick since \\(\mathbf{V}\\) will also be time-varying, and computing \\(\frac{N}{T}\\) such matrices in advance increases the cost.
 
 
 ## Conclusion & Thoughts
 
-In this post I show that the unrolling trick can significantly speed up differentiable IIR filtering in PyTorch.
+In this post, I demonstrate that the unrolling trick can significantly accelerate differentiable IIR filtering in PyTorch.
 The extra memory cost is less of a problem for large batch sizes.
 Although the filter I tested is a simple all-pole filter, it's trivial to extend the idea to general IIR filters.
 
-This method might help addresing one of the issues for future TorchAudio, after the Meta developers [announced](https://github.com/pytorch/audio/issues/3902) their future plan for it.
-In the next major release, all the specialised kernels written in C++, including the `lfilter` I contirbuted years ago, will be removed from TorchAudio.
-The filter I presented here is purely written in Python and it could be a easy drop-in replacement for the current compiled `lfilter` implementation.
+This method might help address one of the issues for future TorchAudio, after the Meta developers [announced](https://github.com/pytorch/audio/issues/3902) their future plan for it.
+In the next major release, all the specialised kernels written in C++, including the `lfilter` I contributed years ago, will be removed from TorchAudio.
+The filter I presented here is written entirely in Python, and it could serve as a straightforward drop-in replacement for the current compiled `lfilter` implementation.
 
 ## Notes
 
-The complete code is available in the jupyter notebook version of this post on [Gist]().
+The complete code is available in the Jupyter notebook version of this post on [Gist]().
