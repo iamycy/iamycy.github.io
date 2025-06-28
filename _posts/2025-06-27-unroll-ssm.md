@@ -316,7 +316,7 @@ Notice that in the second line, I utilised the fact the \\(\mathbf{B}\\) has onl
 (This is not possible if the filter is not strictly all-pole.)
 \\(\mathbf{I}_{.1}\\) denotes the first column of the identity matrix and so on.
 
-Now, the number of autoregressive steps is reduced from \\(T\\) to \\(\lceil \frac{T}{M}\\rceil\\) and the matrix multiplication is done in parallel for every \\(T\\) samples.
+Now, the number of autoregressive steps is reduced from \\(T\\) to \\(\\frac{N}{T}\\) and the matrix multiplication is done in parallel for every \\(T\\) samples.
 There are added costs for pre-computing the transition matrix \\(\mathbf{M}\\) and the input matrix \\(\mathbf{V}\\), though.
 However, as long as the extra cost is relatively small compared to the cost of \\(T\\) autoregressive steps, we should see a speedup.
 
