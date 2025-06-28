@@ -429,15 +429,60 @@ Since \\(T\\) is an important parameter for the unrolled SSM, I did some more be
 ### Varying sequence length
 
 In this benchmark, I fixed the batch size to 8 and the order to 2, and varied the sequence length from 4096 to 262144.
-The results suggest that the best unroll factor increase as the sequence length increases, and it's very likely to be proportional to \\(\\sqrt{T}\\).
+The results suggest that the best unroll factor increase as the sequence length increases, and it's very likely to be \\(\\sqrt{N}\\).
 Also, the longer the sequence length, the more speedup we get from the unrolled SSM.
 
 ![](/images/unroll-ssm/benchmark_seq_len.png)
 
+### Varying filter order
 
+To see how the filter order affects the speed, I fixed the batch size to 8 and the sequence length to 16384, and varied the filter order from 2 to 16.
+It looks like my hypothesis that the best factor is \\(\\sqrt{M}\\) still holds, but the peak gradually shifts to the left as the order increases.
+Moreover, the speedup is less significant for higher orders, which is expected as the \\(\mathbf{V}\\) matrix becomes larger.
 
 ![](/images/unroll-ssm/benchmark_order.png)
+
+### Varying batch size
+
+The speedup is less as the batch size increases, which is expected.
+However, the peak of the best unroll factor also leans towards the left a bit when the batch size increases.
+
 ![](/images/unroll-ssm/benchmark_batch.png)
 
+### Memory usage
+
+To see how the memory usage changes with the unroll factor, I ran the unrolled SSM on a 5060 ti so I can use `torch.cuda.max_memory_allocated()` to measure the memory usage.
+When batch size is 1 and \\(T > 1\\), the memory usage increases as the unroll factor increases, which is expected.
+
 ![](/images/unroll-ssm/mem_batch_1.png)
+
+However, when using a larger batch size (32 in this case), the memory usage saturates and there's barely any difference between different unroll factors.
+
 ![](/images/unroll-ssm/mem_batch_32.png)
+
+
+## Discussion
+
+So far we have seen that the unrolled SSM can achieve a significant speedup for IIR filtering in PyTorch.
+However, how to automatically determine the best unrolling factor is still not clear.
+From the benchmarks I did on an i7 CPU, it seems that the optimal \\(T^*\\) is \\(\sqrt{N}\alpha\\) and \\(0 < \alpha \leq 1\\) is given by a polynomial function of the filter order and batch size.
+However, this may not hold for other hardware.
+
+One thing I didn't mention is about numerical accuracy.
+If \\(|\mathbf{A}|\\) is very small, the precomputed exponentials \\(\mathbf{A}^T \to \mathbf{0}\\) which may not be accurately represented in floating point, especially in deep learning applications we use single precision a lot.
+This is less of a problem for the standard SSM since at each time step the input mixed with the state vector, thus could help cancel out the numerical errors.
+
+The idea should apply when there are zeros in the filter.
+\\(\\mathbf{B}\\) will not be a simple one-hot vector anymore so \\(\mathbf{V}\\) has to be a full \\(MT\\times MT\\) square matrix.
+Time-varying filters will benefit less from the unrolling trick since \\(\mathbf{V}\\) will also be time-varying, and computing \\(\frac{N}{T}\\) such matrices in advance increase the cost a lot.
+
+
+## Conclusion & Thoughts
+
+In this post I show that the unrolling trick can significantly speed up differentiable IIR filtering in PyTorch.
+Due to the backend that computes matrix multiplication, the extra memory cost is less for larger batch sizes.
+Although the filter I tested is a simple all-pole filter, it's trivial to extend the idea to general IIR filters.
+
+This idea might help addresing one of the issues for future TorchAudio, after the Meta developers [announced](https://github.com/pytorch/audio/issues/3902) their future plan for it.
+In the next major release, all the specialised kernels written in C++, including the `lfilter` I contirbuted years ago, will be removed from TorchAudio.
+The filter I presented here is purely written in Python and as long as we have a clever way to determine the best unrolling factor depends on the filter parameters, it should be a easy drop-in replacement for the current `lfilter` implementation.
