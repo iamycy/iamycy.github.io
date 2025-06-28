@@ -112,15 +112,15 @@ naive_allpole_t = Timer(
 naive_allpole_t.blocked_autorange(min_run_time=1.0)
 ```
 ```shell
-<torch.utils.benchmark.utils.common.Measurement object at 0x7d60c6a20770>
+<torch.utils.benchmark.utils.common.Measurement object at 0x71508416b950>
 naive_allpole
 Naive All-Pole Filter
-  Median: 165.85 ms
-  IQR:    4.73 ms (163.46 to 168.19)
+  Median: 182.59 ms
+  IQR:    5.00 ms (180.77 to 185.77)
   6 measurements, 1 runs per measurement, 4 threads
 ```
 
-165.85 ms is relatively slow, but it is expected.
+182.59 ms is relatively slow, but it is expected.
 
 ## State-space model formulation
 
@@ -149,7 +149,7 @@ y[n] &= \mathbf{B}^\top \mathbf{h}[n].
 $$
 
 Here, I simplified the original SSM by omitting the direct path, as it can be derived from the state vector (for the all-pole filter only).
-Here's the PyTorch implementation of it:
+Below is the PyTorch implementation of it:
 
 ```python
 @torch.jit.script
@@ -219,15 +219,15 @@ state_space_allpole_t = Timer(
 state_space_allpole_t.blocked_autorange(min_run_time=1.0)
 ```
 ```shell
-<torch.utils.benchmark.utils.common.Measurement object at 0x7d62d32a5160>
+<torch.utils.benchmark.utils.common.Measurement object at 0x714e42f440b0>
 state_space_allpole
 State-Space All-Pole Filter
-  Median: 115.29 ms
-  IQR:    1.47 ms (114.87 to 116.34)
-  9 measurements, 1 runs per measurement, 4 threads
+  Median: 130.03 ms
+  IQR:    3.13 ms (128.76 to 131.89)
+  8 measurements, 1 runs per measurement, 4 threads
 ```
 
-Interestingly, the SSM implementation is approximately 30 ms faster.
+Interestingly, the SSM implementation is approximately 50 ms faster.
 
 By using `torch.profiler.profile`, I found that, in the naive implementation, `torch.cat` for updating the last M outputs accounts for a significant portion of the total time (~20%).
 The actual computation, `torch.addmv`, takes only about 10% of the time.
@@ -406,16 +406,16 @@ state_space_allpole_unrolled_t = Timer(
 state_space_allpole_unrolled_t.blocked_autorange(min_run_time=1.0)
 ```
 ```shell
-<torch.utils.benchmark.utils.common.Measurement object at 0x71c957fecd40>
+<torch.utils.benchmark.utils.common.Measurement object at 0x714e4364dfa0>
 state_space_allpole_unrolled
 State-Space All-Pole Filter Unrolled
-  1.89 ms
-  1 measurement, 1000 runs , 4 threads
+  Median: 1.98 ms
+  IQR:    0.02 ms (1.97 to 1.99)
+  6 measurements, 100 runs per measurement, 4 threads
 ```
-1.89 ms! What sorcery is this? That's a whopping 60x speedup compared to the standard SSM implementation!
+1.91 ms! What sorcery is this? That's a whopping 60x speedup compared to the standard SSM implementation!
 
-A closer look at the profiling results shows that in total, 25% of the time is spent on matrix multiplication and addition.
-Interestingly, around 30% of the time is spent on the `torch.flip` operation for preparing the input matrix \\(\mathbf{V}\\).
+A closer look at the profiling results shows that in total, 38% of the time is spent on matrix multiplication and addition.
 The speedup comes with a cost of increased memory usage, requiring more than 2 MB for filtering.
 Not a significant cost for modern Hardwares.
 
@@ -438,7 +438,7 @@ Additionally, the longer the sequence length, the greater the speedup we achieve
 ### Varying filter order
 
 To examine the impact of filter order on speed, I set the batch size to 8 and the sequence length to 16384, and then varied the filter order from 2 to 16.
-It appears that my hypothesis that the best factor is \\(\\sqrt{M}\\) still holds, but the peak gradually shifts to the left as the order increases.
+It appears that my hypothesis that the best factor is \\(\\sqrt{N}\\) still holds, but the peak gradually shifts to the left as the order increases.
 Moreover, the speedup is less significant for higher orders, which is expected as the \\(\mathbf{V}\\) matrix becomes larger.
 
 ![](/images/unroll-ssm/benchmark_order.png)
