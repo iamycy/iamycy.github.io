@@ -122,10 +122,10 @@ Naive All-Pole Filter
 
 165.85 ms is relatively slow, but it is expected.
 
-## state-space model formulation
+## State-space model formulation
 
 Before we proceed to showing the sample unrolling trick, let's first introduce the state-space model (SSM) formulation of the all-pole IIR filter.
-The model is similar to the one used in the [TDF-II filter](https://iamycy.github.io/posts/2025/04/differentiable-tdf-ii/):
+The model is similar to the one used in my previous blogpost on [TDF-II filter](https://iamycy.github.io/posts/2025/04/differentiable-tdf-ii/):
 
 $$
 \begin{align}
