@@ -254,7 +254,7 @@ $$
 &= \mathbf{A} (\mathbf{A}^2 \mathbf{h}[n-1] + \mathbf{A} \mathbf{B} x[n] + \mathbf{B} x[n+1]) + \mathbf{B} x[n+2] \\
 &= \mathbf{A}^3 \mathbf{h}[n-1] + \mathbf{A}^2 \mathbf{B} x[n] + \mathbf{A} \mathbf{B} x[n+1] + \mathbf{B} x[n] \\
 & \vdots \\
-\mathbf{h}[n+T-1] &= \mathbf{A}^{T} \mathbf{h}[n-1] + \sum_{t=0}^{T-1} \mathbf{A}^t \mathbf{B} x[n+t] \\
+\mathbf{h}[n+T-1] &= \mathbf{A}^{T} \mathbf{h}[n-1] + \sum_{t=0}^{T-1} \mathbf{A}^{T - t -1} \mathbf{B} x[n+t] \\
 \end{align}
 $$
 
@@ -480,7 +480,7 @@ Time-varying filters will benefit less from the unrolling trick since \\(\mathbf
 ## Conclusion & Thoughts
 
 In this post I show that the unrolling trick can significantly speed up differentiable IIR filtering in PyTorch.
-Due to the backend that computes matrix multiplication, the extra memory cost is less for larger batch sizes.
+The extra memory cost is less for larger batch sizes, which might be due to the design of the backend that computes the matrix multiplication.
 Although the filter I tested is a simple all-pole filter, it's trivial to extend the idea to general IIR filters.
 
 This idea might help addresing one of the issues for future TorchAudio, after the Meta developers [announced](https://github.com/pytorch/audio/issues/3902) their future plan for it.
