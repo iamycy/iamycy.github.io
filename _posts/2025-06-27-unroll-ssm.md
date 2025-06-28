@@ -25,7 +25,7 @@ It also requires that the filter has distinct poles so the state space transitio
 The method that GPU Audio presented seems to be doable solely using PyTorch Python API and doesn't have the restrctions I mentioned, thus I decided to benchmark it and see how it performs.
 
 Since it's just a proof of concept, the filter I'm going to test is a **time-invariant all-pole IIR filter**, which is the minimal case of a recursive filter.
-This does let us to leverage some special optimisations that won't work on time-varying general IIR filters, but that won't affect the approach I'm going to present here.
+This does let us to leverage some special optimisations that won't work on time-varying general IIR filters, but that won't affect the main idea I'm going to present here.
 
 
 ## Naive implementation of an all-pole IIR filter
