@@ -127,7 +127,7 @@ Before we proceed to showing the sample unrolling trick, let's first introduce t
 The model is similar to the one used in the [TDF-II filter](https://iamycy.github.io/posts/2025/04/differentiable-tdf-ii/):
 
 $$
-\begin{align*}
+\begin{align}
 \mathbf{h}[n] &= \begin{bmatrix}
     -a_1 & -a_2 & \cdots & -a_{M-1} & -a_M \\
     1 & 0 &\cdots & 0 & 0 \\
@@ -144,7 +144,7 @@ $$
 &= \mathbf{A} \mathbf{h}[n-1] + \mathbf{B} x[n] \\
 
 y[n] &= \mathbf{B}^\top \mathbf{h}[n].
-\end{align*}
+\end{align}
 $$
 
 Here I simplified the original SSM a bit by omitting the direct path since we can derive it from the state vector (for all-pole filter only).
@@ -228,10 +228,197 @@ State-Space All-Pole Filter
 
 Interesting, the SSM implementation is actually faster by about 30 ms!
 
-By using `torch.profiler.profile`, I found that `torch.cat` for updating the last M outputs takes a significant amount of the total time (~20%).
-The actual computation, `torch.addmv`, actually takes only about 10%.
+By using `torch.profiler.profile`, I found that, in the naive implementation, `torch.cat` for updating the last M outputs takes a significant amount of the total time (~20%).
+The actual computation, `torch.addmv`, takes only about 10%.
 Regarding the memory usage, the most memory-consuming operation is `torch.addmv`, which uses about 512 Kb of memory.
-In contrast, the SSM implementation uses more memory (> 1 Mb) due to the matrix multiplication, but now roughly 38% of the time is spent on filtering since it doesn't have to call `torch.cat` at each time step anymore.
-The state vecotr (a.k.a the last M outputs) automatically get updated during the matrix multiplication.
+In contrast, the SSM implementation uses more memory (> 1 Mb) due to the matrix multiplication, but roughly 38% of the time is spent on filtering since it doesn't have to call `torch.cat` at each time step anymore.
+The state vector (a.k.a the last M outputs) automatically get updated during the matrix multiplication.
 
 **Conclusion**: tensor concatenation (including `torch.cat` and `torch.stack`) is expensive, and we should avoid it if possible.
+
+
+## Unrolling the SSM
+
+Now we can apply the unrolling trick to the SSM implementation.
+The idea is to divide the input signal into blocks of size \\(T\\) and perform the recursion on the blocks instead of sample-by-sample.
+Each recursion takes the last vector state \\(\\mathbf{h}[n-1]\\) and predicts the next \\(T\\) states \\([\\mathbf{h}[n], \mathbf{h}[n+1], \ldots, \mathbf{h}[n+T-1]]^\top\\) at once.
+To see how to calculate these states, let's unroll the SSM recursion for \\(T\\) steps:
+
+$$
+\begin{align}
+\mathbf{h}[n] &= \mathbf{A} \mathbf{h}[n-1] + \mathbf{B} x[n] \\
+\mathbf{h}[n+1] &= \mathbf{A} \mathbf{h}[n] + \mathbf{B} x[n+1] \\
+&= \mathbf{A} (\mathbf{A} \mathbf{h}[n-1] + \mathbf{B} x[n]) + \mathbf{B} x[n+1] \\
+&= \mathbf{A}^2 \mathbf{h}[n-1] + \mathbf{A} \mathbf{B} x[n] + \mathbf{B} x[n+1] \\
+\mathbf{h}[n+2] &= \mathbf{A} \mathbf{h}[n+1] + \mathbf{B} x[n+2] \\
+&= \mathbf{A} (\mathbf{A}^2 \mathbf{h}[n-1] + \mathbf{A} \mathbf{B} x[n] + \mathbf{B} x[n+1]) + \mathbf{B} x[n+2] \\
+&= \mathbf{A}^3 \mathbf{h}[n-1] + \mathbf{A}^2 \mathbf{B} x[n] + \mathbf{A} \mathbf{B} x[n+1] + \mathbf{B} x[n] \\
+& \vdots \\
+\mathbf{h}[n+T-1] &= \mathbf{A}^{T} \mathbf{h}[n-1] + \sum_{t=0}^{T-1} \mathbf{A}^t \mathbf{B} x[n+t] \\
+\end{align}
+$$
+
+We can rewrite the above equation in matrix form as follows:
+
+$$
+\begin{align}
+\begin{bmatrix}
+    \mathbf{h}[n] \\
+    \mathbf{h}[n+1] \\
+    \vdots \\
+    \mathbf{h}[n+T-1]
+\end{bmatrix} &= \begin{bmatrix}
+    \mathbf{A} \\
+    \mathbf{A}^2 \\
+    \vdots \\
+    \mathbf{A}^T \\
+\end{bmatrix} \mathbf{h}[n-1]
++ \begin{bmatrix}
+    \mathbf{I} & 0 & \cdots & 0 \\
+    \mathbf{A} & \mathbf{I} & \cdots & 0 \\
+    \vdots & \vdots & \ddots & \vdots \\
+    \mathbf{A}^{T-1} & \mathbf{A}^{T-2} & \cdots & \mathbf{I}
+\end{bmatrix}
+\begin{bmatrix}
+    \mathbf{B}x[n] \\
+    \mathbf{B}x[n+1] \\
+    \vdots \\
+    \mathbf{B}x[n+T-1]
+\end{bmatrix} \\
+& = \begin{bmatrix}
+    \mathbf{A} \\
+    \mathbf{A}^2 \\
+    \vdots \\
+    \mathbf{A}^T \\
+\end{bmatrix} \mathbf{h}[n-1]
++ \begin{bmatrix}
+    \mathbf{I}_{.1} & 0 & \cdots & 0 \\
+    \mathbf{A}_{.1} & \mathbf{I}_{.1} & \cdots & 0 \\
+    \vdots & \vdots & \ddots & \vdots \\
+    \mathbf{A}_{.1}^{T-1} & \mathbf{A}_{.1}^{T-2} & \cdots & \mathbf{I}_{.1}
+\end{bmatrix}
+\begin{bmatrix}
+    x[n] \\
+    x[n+1] \\
+    \vdots \\
+    x[n+T-1]
+\end{bmatrix} \\
+& = \mathbf{M} \mathbf{h}[n-1] + \mathbf{V} \begin{bmatrix}
+    x[n] \\
+    x[n+1] \\
+    \vdots \\
+    x[n+T-1]
+\end{bmatrix} \\
+\end{align}
+$$
+
+Notice that in the second line, I utilised the fact the \\(\mathbf{B}\\) has only one non-zero entry to simplify the matrix.
+\\(\mathbf{I}_{.1}\\) denotes the first column of the identity matrix and so on.
+
+Now, the number of autoregressive steps is reduced from \\(T\\) to \\(\lceil \frac{T}{M}\\rceil\\) and the matrix multiplication is done in parallel for every \\(T\\) samples.
+There are added costs for pre-computing the transition matrix \\(\mathbf{M}\\) and the input matrix \\(\mathbf{V}\\), though.
+However, as long as the extra cost is relatively small compared to the cost of \\(T\\) autoregressive steps, we should see a speedup.
+
+Here's the PyTorch implementation of the unrolled SSM:
+
+```python
+@torch.jit.script
+def state_space_allpole_unrolled(
+    x: Tensor, a: Tensor, unroll_factor: int = 1
+) -> Tensor:
+    """
+    Unrolled state-space implementation of all-pole filtering.
+
+    Args:
+        x (Tensor): Input signal.
+        a (Tensor): All-pole coefficients.
+        unroll_factor (int): Factor by which to unroll the loop.
+
+    Returns:
+        Tensor: Filtered output signal.
+    """
+    if unroll_factor == 1:
+        return state_space_allpole(x, a)
+    elif unroll_factor < 1:
+        raise ValueError("Unroll factor must be >= 1")
+
+    assert x.dim() == 2, "Input signal must be a 2D tensor (batch_size, signal_length)"
+    assert a.dim() == 1, "All-pole coefficients must be a 1D tensor"
+    assert (
+        x.size(1) % unroll_factor == 0
+    ), "Signal length must be divisible by unroll factor"
+
+    c = a2companion(a)
+
+    # create an initial identity matrix
+    initial = torch.eye(c.size(0), device=c.device, dtype=c.dtype)
+    c_list = [initial]
+    # TODO: use parallel scan to improve speed
+    for _ in range(unroll_factor):
+        c_list.append(c_list[-1] @ c)
+
+    # c_list = [I c c^2 ... c^unroll_factor]
+    M = torch.cat(c_list[1:], dim=0).T
+    flatten_c_list = torch.cat(
+        [c.new_zeros(c.size(0) * (unroll_factor - 1))]
+        + [xx[:, 0] for xx in c_list[:-1]],
+        dim=0,
+    )
+    V = flatten_c_list.unfold(0, c.size(0) * unroll_factor, c.size(0)).flip(0)
+
+    # divide the input signal into blocks of size unroll_factor
+    unrolled_x = x.unflatten(1, (-1, unroll_factor)) @ V
+
+    output = []
+    # assume initial condition is zero
+    h = x.new_zeros(x.size(0), c.size(0))
+    for xt in unrolled_x.unbind(1):
+        h = torch.addmm(xt, h, M)
+        # B^T @ h
+        output.append(h[:, :: c.size(0)])
+        h = h[
+            :, -c.size(0) :
+        ]  # take the last state vector as the initial condition for the next step
+    return torch.cat(output, dim=1)
+```
+
+The `unroll_factor` parameter controls how many samples to process in parallel.
+If it is set to 1, the function behaves like the original SSM implementation.
+
+Now let's benchmark the speed of the unrolled SSM implementation.
+We'll use `unroll_factor=128` since I already tested that it is the optimal value :)
+
+```python
+state_space_allpole_unrolled_t = Timer(
+    stmt="state_space_allpole_unrolled(x, a, unroll_factor=unroll_factor)",
+    globals={
+        "state_space_allpole_unrolled": state_space_allpole_unrolled,
+        "x": x,
+        "a": a,
+        "unroll_factor": 128,
+    },
+    label="state_space_allpole_unrolled",
+    description="State-Space All-Pole Filter Unrolled",
+    num_threads=4,
+)
+state_space_allpole_unrolled_t.blocked_autorange(min_run_time=1.0)
+```
+```shell
+<torch.utils.benchmark.utils.common.Measurement object at 0x71c957fecd40>
+state_space_allpole_unrolled
+State-Space All-Pole Filter Unrolled
+  1.89 ms
+  1 measurement, 1000 runs , 4 threads
+```
+1.89 ms! What sorcery is this? That's a whopping 60x speedup compared to the standard SSM implementation!
+
+A closer look at the profiling results shows in total 25% of the time is spent on matrix multiplication and addition.
+Interestingly, around 30% of the time is spent on the `torch.flip` operation for preparing the input matrix \\(\mathbf{V}\\).
+The speedup does comes with a cost of more memory usage, requiring about > 2 Mb for filtering.
+Honestly, not a significant cost for modern Hardwares.
+
+Notice that for convenience I ran the above benchmarks using CPU, which has very limited parallelism compared to GPU.
+Nevertheless, the huge speedup we see tells us that function call overhead is a major bottleneck for running recursions.
+
+
+### More comparison
