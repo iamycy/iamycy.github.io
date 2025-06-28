@@ -112,15 +112,15 @@ naive_allpole_t = Timer(
 naive_allpole_t.blocked_autorange(min_run_time=1.0)
 ```
 ```shell
-<torch.utils.benchmark.utils.common.Measurement object at 0x71508416b950>
+<torch.utils.benchmark.utils.common.Measurement object at 0x7f5b4423b260>
 naive_allpole
 Naive All-Pole Filter
-  Median: 182.59 ms
-  IQR:    5.00 ms (180.77 to 185.77)
+  Median: 168.93 ms
+  IQR:    0.54 ms (168.57 to 169.11)
   6 measurements, 1 runs per measurement, 4 threads
 ```
 
-182.59 ms is relatively slow, but it is expected.
+168.93 ms is relatively slow, but it is expected.
 
 ## State-space model formulation
 
@@ -219,12 +219,12 @@ state_space_allpole_t = Timer(
 state_space_allpole_t.blocked_autorange(min_run_time=1.0)
 ```
 ```shell
-<torch.utils.benchmark.utils.common.Measurement object at 0x714e42f440b0>
+<torch.utils.benchmark.utils.common.Measurement object at 0x7f5a02eaf4a0>
 state_space_allpole
 State-Space All-Pole Filter
-  Median: 130.03 ms
-  IQR:    3.13 ms (128.76 to 131.89)
-  8 measurements, 1 runs per measurement, 4 threads
+  Median: 118.41 ms
+  IQR:    1.17 ms (117.79 to 118.96)
+  9 measurements, 1 runs per measurement, 4 threads
 ```
 
 Interestingly, the SSM implementation is approximately 50 ms faster.
@@ -406,14 +406,14 @@ state_space_allpole_unrolled_t = Timer(
 state_space_allpole_unrolled_t.blocked_autorange(min_run_time=1.0)
 ```
 ```shell
-<torch.utils.benchmark.utils.common.Measurement object at 0x714e4364dfa0>
+<torch.utils.benchmark.utils.common.Measurement object at 0x7f5a01d75160>
 state_space_allpole_unrolled
 State-Space All-Pole Filter Unrolled
-  Median: 1.98 ms
-  IQR:    0.02 ms (1.97 to 1.99)
+  Median: 1.89 ms
+  IQR:    0.08 ms (1.88 to 1.96)
   6 measurements, 100 runs per measurement, 4 threads
 ```
-1.91 ms! What sorcery is this? That's a whopping 60x speedup compared to the standard SSM implementation!
+1.89 ms! What sorcery is this? That's a whopping 60x speedup compared to the standard SSM implementation!
 
 A closer look at the profiling results shows that in total, 38% of the time is spent on matrix multiplication and addition.
 The speedup comes with a cost of increased memory usage, requiring more than 2 MB for filtering.
