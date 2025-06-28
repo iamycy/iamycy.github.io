@@ -1,7 +1,7 @@
 ---
 title: 'Block-based Fast Differentiable IIR in PyTorch'
-date: 2025-06-27
-permalink: /posts/2025/06/27/unroll-ssm/
+date: 2025-06-28
+permalink: /posts/2025/06/28/unroll-ssm/
 tags:
   - differentiable IIR
   - scientific computing
