@@ -490,4 +490,4 @@ The filter I presented here is written entirely in Python, and it could serve as
 
 ## Notes
 
-The complete code is available in the Jupyter notebook version of this post on [Gist]().
+The complete code is available in the Jupyter notebook version of this post on [Gist](https://gist.github.com/yoyolicoris/b67407ffb56fa168c59275aea548fe96).
