@@ -451,12 +451,12 @@ However, the peak of the best unroll factor also leans towards the left a bit wh
 
 ### Memory usage
 
-To see how the memory usage changes with the unroll factor, I ran the unrolled SSM on a 5060 ti so I can use `torch.cuda.max_memory_allocated()` to measure the memory usage.
-When batch size is 1 and \\(T > 1\\), the memory usage increases as the unroll factor increases, which is expected.
+To see how the memory usage changes in a differentiable training context, I ran the unrolled SSM on a 5060 ti so I can use `torch.cuda.max_memory_allocated()` to measure the memory usage.
+When batch size is 1, as expected, the memory usage grows quadratically with the unroll factor, due to the creation of the \\(\mathbf{V}\\) matrix.
 
 ![](/images/unroll-ssm/mem_batch_1.png)
 
-However, when using a larger batch size (32 in this case), the memory usage saturates and there's barely any difference between different unroll factors.
+However, when using a larger batch size (32 in this case), this cost becomes less significant compared to more memory used for the input signal.
 
 ![](/images/unroll-ssm/mem_batch_32.png)
 
@@ -465,7 +465,7 @@ However, when using a larger batch size (32 in this case), the memory usage satu
 
 So far we have seen that the unrolled SSM can achieve a significant speedup for IIR filtering in PyTorch.
 However, how to automatically determine the best unrolling factor is still not clear.
-From the benchmarks I did on an i7 CPU, it seems that the optimal \\(T^*\\) is \\(\sqrt{N}\alpha\\) and \\(0 < \alpha \leq 1\\) is given by a polynomial function of the filter order and batch size.
+From the benchmarks I did on an i7 CPU, it seems that the optimal \\(T^*\\) is \\(\sqrt{N}\alpha\\) and \\(0 < \alpha \leq 1\\) is given by a function of the filter order and batch size.
 However, this may not hold for other hardware.
 
 One thing I didn't mention is about numerical accuracy.
@@ -480,9 +480,13 @@ Time-varying filters will benefit less from the unrolling trick since \\(\mathbf
 ## Conclusion & Thoughts
 
 In this post I show that the unrolling trick can significantly speed up differentiable IIR filtering in PyTorch.
-The extra memory cost is less for larger batch sizes, which might be due to the design of the backend that computes the matrix multiplication.
+The extra memory cost is less of a problem for large batch sizes.
 Although the filter I tested is a simple all-pole filter, it's trivial to extend the idea to general IIR filters.
 
-This idea might help addresing one of the issues for future TorchAudio, after the Meta developers [announced](https://github.com/pytorch/audio/issues/3902) their future plan for it.
+This method might help addresing one of the issues for future TorchAudio, after the Meta developers [announced](https://github.com/pytorch/audio/issues/3902) their future plan for it.
 In the next major release, all the specialised kernels written in C++, including the `lfilter` I contirbuted years ago, will be removed from TorchAudio.
-The filter I presented here is purely written in Python and as long as we have a clever way to determine the best unrolling factor depends on the filter parameters, it should be a easy drop-in replacement for the current `lfilter` implementation.
+The filter I presented here is purely written in Python and it could be a easy drop-in replacement for the current compiled `lfilter` implementation.
+
+## Notes
+
+The complete code is available in the jupyter notebook version of this post on [Gist]().
