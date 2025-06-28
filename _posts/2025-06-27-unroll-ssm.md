@@ -313,6 +313,7 @@ $$
 $$
 
 Notice that in the second line, I utilised the fact the \\(\mathbf{B}\\) has only one non-zero entry to simplify the matrix.
+(This is not possible if the filter is not strictly all-pole.)
 \\(\mathbf{I}_{.1}\\) denotes the first column of the identity matrix and so on.
 
 Now, the number of autoregressive steps is reduced from \\(T\\) to \\(\lceil \frac{T}{M}\\rceil\\) and the matrix multiplication is done in parallel for every \\(T\\) samples.
@@ -414,11 +415,29 @@ State-Space All-Pole Filter Unrolled
 
 A closer look at the profiling results shows in total 25% of the time is spent on matrix multiplication and addition.
 Interestingly, around 30% of the time is spent on the `torch.flip` operation for preparing the input matrix \\(\mathbf{V}\\).
-The speedup does comes with a cost of more memory usage, requiring about > 2 Mb for filtering.
+The speedup does comes with a cost of more memory usage, requiring more than 2 Mb for filtering.
 Honestly, not a significant cost for modern Hardwares.
 
 Notice that for convenience I ran the above benchmarks using CPU, which has very limited parallelism compared to GPU.
-Nevertheless, the huge speedup we see tells us that function call overhead is a major bottleneck for running recursions.
+Thus, the huge speedup we see tells us that function call overhead is the major bottleneck for running recursions.
 
 
-### More comparison
+## More comparison
+
+Since \\(T\\) is an important parameter for the unrolled SSM, I did some more benchmarks to see how it affects the speed.
+
+### Varying sequence length
+
+In this benchmark, I fixed the batch size to 8 and the order to 2, and varied the sequence length from 4096 to 262144.
+The results suggest that the best unroll factor increase as the sequence length increases, and it's very likely to be proportional to \\(\\sqrt{T}\\).
+Also, the longer the sequence length, the more speedup we get from the unrolled SSM.
+
+![](/images/unroll-ssm/benchmark_seq_len.png)
+
+
+
+![](/images/unroll-ssm/benchmark_order.png)
+![](/images/unroll-ssm/benchmark_batch.png)
+
+![](/images/unroll-ssm/mem_batch_1.png)
+![](/images/unroll-ssm/mem_batch_32.png)
