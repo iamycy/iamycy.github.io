@@ -467,7 +467,7 @@ When using a larger batch size (32 in this case), this cost becomes less signifi
 So far, we have seen that the unrolled SSM can achieve a significant speedup for IIR filtering in PyTorch.
 However, determining the best unrolling factor automatically is still unclear.
 From the benchmarks I did on an i7 CPU, it seems that the optimal \\(T^*\\) is \\(\sqrt{N}\alpha\\) and \\(0 < \alpha \leq 1\\) is given by a function of the filter order and batch size.
-However, this may not hold for other hardware.
+Since I also observe similar behaviour on the GPU, it is likely that this hypothesis holds true for other hardware as well.
 
 One thing I didn't mention is numerical accuracy.
 If \\(|\mathbf{A}|\\) is very small, the precomputed exponentials \\(\mathbf{A}^T \to \mathbf{0}\\) which may not be accurately represented in floating point, especially in deep learning applications we use single precision a lot.
