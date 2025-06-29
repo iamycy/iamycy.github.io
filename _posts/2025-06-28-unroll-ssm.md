@@ -486,7 +486,7 @@ Although the filter I tested is a simple all-pole filter, it's trivial to extend
 
 This method might help address one of the issues for future TorchAudio, after the Meta developers [announced](https://github.com/pytorch/audio/issues/3902) their future plan for it.
 In the next major release, all the specialised kernels written in C++, including the `lfilter` I contributed years ago, will be removed from TorchAudio.
-The filter I presented here is written entirely in Python, and it could serve as a straightforward drop-in replacement for the current compiled `lfilter` implementation.
+The filter I presented here is written entirely in Python and can serve as a straightforward drop-in replacement for the current compiled `lfilter` implementation.
 
 ## Notes
 
@@ -495,7 +495,7 @@ The complete code is available in the Jupyter notebook version of this post on [
 
 ## Update (29.6.2025)
 
-I realised that the `state_space_allpole_unrolled` function I made is actually very close to a two level [parallel scan](https://en.wikipedia.org/wiki/Prefix_sum) and with some modifications, we can squeeze a bit more speedup out of it.
+I realised that the `state_space_allpole_unrolled` function I made is very close to a two-level [parallel scan](https://en.wikipedia.org/wiki/Prefix_sum), and with some modifications, we can squeeze a bit more speedup out of it.
 Instead of computing all the \\(T\\) states at once per block, we can just compute the last state, which is the only one we need for the next block.
 Thus, the matrix size for the multiplication is reduced from \\(\mathbf{M} \in \mathbb{R}^{MT\\times MT}\\) to \\(\mathbf{A}^T \in \mathbb{R}^{M\\times M}\\).
 The first \\(M-1\\) states for all the blocks can be computed later in parallel.
@@ -640,7 +640,7 @@ State-Space All-Pole Filter Unrolled
   7 measurements, 100 runs per measurement, 4 threads
 ```
 
-1.40 ms! That's around 1.35x faster than the previous version.
-Might worth redoing the benchmarks again but I'm too lazy to do it now :D
-Should be similar to the previous result. 
-I'll put the updated benchmark results in the Gist soon.
+1.40 ms! That's approximately 1.35 times faster than the previous version.
+It might be worth redoing the benchmarks again, but I'm too lazy to do it now :D
+It should be similar to the previous result. 
+I'll upload benchmark results to Gist soon.
