@@ -491,3 +491,156 @@ The filter I presented here is written entirely in Python, and it could serve as
 ## Notes
 
 The complete code is available in the Jupyter notebook version of this post on [Gist](https://gist.github.com/yoyolicoris/b67407ffb56fa168c59275aea548fe96).
+
+
+## Update (29.6.2025)
+
+I realised that the `state_space_allpole_unrolled` function I made is actually very close to a two level [parallel scan](https://en.wikipedia.org/wiki/Prefix_sum) and with some modifications, we can squeeze a bit more speedup out of it.
+Instead of computing all the \\(T\\) states at once per block, we can just compute the last state, which is the only one we need for the next block.
+Thus, the matrix size for the multiplication is reduced from \\(\mathbf{M} \in \mathbb{R}^{MT\\times MT}\\) to \\(\mathbf{A}^T \in \mathbb{R}^{M\\times M}\\).
+The first \\(M-1\\) states for all the blocks can be computed later in parallel.
+The algorithm (parallel scan) is as follows:
+
+Firstly, compute the input to the last state in the block:
+
+$$
+\mathbf{z}[n+T-1] = 
+\begin{bmatrix}
+    \mathbf{A}_{.1}^{T-1} & \mathbf{A}_{.1}^{T-2} & \cdots & \mathbf{I}_{.1}
+\end{bmatrix}
+\begin{bmatrix}
+    x[n] \\
+    x[n+1] \\
+    \vdots \\
+    x[n+T-1]
+\end{bmatrix}.
+$$
+
+Then, compute the last state in each block recursively as follows:
+
+$$
+\mathbf{h}[n+T-1] = \mathbf{A}^{T} \mathbf{h}[n-1] + \mathbf{z}[n+T-1].
+$$
+
+Lastly, compute the remaining states in parallel:
+
+$$
+\begin{bmatrix}
+    \mathbf{h}[n] \\
+    \mathbf{h}[n+1] \\
+    \vdots \\
+    \mathbf{h}[n+T-2]
+\end{bmatrix} =
+\begin{bmatrix}
+    \mathbf{A}  & \mathbf{I}_{.1} & 0 & \cdots & 0 \\
+    \mathbf{A}^2 &  \mathbf{A}_{.1} & \mathbf{I}_{.1} & \cdots & 0 \\
+    \vdots & \vdots & \vdots & \ddots & \vdots \\
+    \mathbf{A}^{T-1} &　\mathbf{A}_{.1}^{T-2} & \mathbf{A}_{.1}^{T-3} & \cdots & \mathbf{I}_{.1}
+\end{bmatrix}
+\begin{bmatrix}
+    \mathbf{h}[n-1] \\
+    x[n] \\
+    x[n+1] \\
+    \vdots \\
+    x[n+T-2]
+\end{bmatrix}.
+$$
+
+The following code implements this algorithm, modified from the previous `state_space_allpole_unrolled` function.
+
+```python
+@torch.jit.script
+def state_space_allpole_unrolled_v2(
+    x: Tensor, a: Tensor, unroll_factor: int = 1
+) -> Tensor:
+    """
+    Unrolled state-space implementation of all-pole filtering.
+
+    Args:
+        x (Tensor): Input signal.
+        a (Tensor): All-pole coefficients.
+        unroll_factor (int): Factor by which to unroll the loop.
+
+    Returns:
+        Tensor: Filtered output signal.
+    """
+    if unroll_factor == 1:
+        return state_space_allpole(x, a)
+    elif unroll_factor < 1:
+        raise ValueError("Unroll factor must be >= 1")
+
+    assert x.dim() == 2, "Input signal must be a 2D tensor (batch_size, signal_length)"
+    assert a.dim() == 1, "All-pole coefficients must be a 1D tensor"
+    assert (
+        x.size(1) % unroll_factor == 0
+    ), "Signal length must be divisible by unroll factor"
+
+    c = a2companion(a)
+
+    # create an initial identity matrix
+    I = torch.eye(c.size(0), device=c.device, dtype=c.dtype)
+    c_list = [I]
+    # TODO: use parallel scan to improve speed
+    for _ in range(unroll_factor):
+        c_list.append(c_list[-1] @ c)
+
+    # c_list = [I c c^2 ... c^unroll_factor]
+    flatten_c_list = torch.cat(
+        [c.new_zeros(c.size(0) * (unroll_factor - 1))]
+        + [xx[:, 0] for xx in c_list[:-1]],
+        dim=0,
+    )
+    V = flatten_c_list.unfold(0, c.size(0) * unroll_factor, c.size(0)).flip(0)
+
+    # divide the input signal into blocks of size unroll_factor
+    unrolled_x = x.unflatten(1, (-1, unroll_factor))
+
+    # get the last row of Vx
+    last_x = unrolled_x @ V[:, -c.size(0) :]
+
+    # initial condition
+    zi = x.new_zeros(x.size(0), c.size(0))
+
+    # transition matrix on the block level
+    AT = c_list[-1].T
+    block_output = []
+    h = zi
+    # block level recursion
+    for xt in last_x.unbind(1):
+        h = torch.addmm(xt, h, AT)
+        block_output.append(h)
+
+    # stack the accumulated last outputs of the blocks as initial conditions for the intermediate steps
+    initials = torch.stack([zi] + block_output, dim=1)
+
+    # prepare the augmented matrix and input for all the remaining steps
+    aug_x = torch.cat([initials[:, :-1], unrolled_x[..., :-1]], dim=2)
+    aug_A = torch.cat(
+        [
+            torch.stack([c[0] for c in c_list[1:-1]], dim=1),
+            V[:-1, : -c.size(0) : c.size(0)],
+        ],
+        dim=0,
+    )
+    output = aug_x @ aug_A
+
+    # concat the first M - 1 outputs with the last one
+    output = torch.cat([output, initials[:, 1:, :1]], dim=2)
+    return output.flatten(1, 2)
+```
+
+Let's benchmark it!
+
+```shell
+<torch.utils.benchmark.utils.common.Measurement object at 0x78d297b8b290>
+state_space_allpole_unrolled_v2
+State-Space All-Pole Filter Unrolled
+  Median: 1.40 ms
+  IQR:    0.01 ms (1.40 to 1.41)
+  7 measurements, 100 runs per measurement, 4 threads
+```
+
+1.40 ms! That's around 1.35x faster than the previous version.
+Might worth redoing the benchmarks again but I'm too lazy to do it now :D
+Should be similar to the previous result. 
+I'll put the updated benchmark results in the Gist soon.
