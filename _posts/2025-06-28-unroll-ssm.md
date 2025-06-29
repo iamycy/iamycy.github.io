@@ -495,7 +495,7 @@ The complete code is available in the Jupyter notebook version of this post on [
 
 ## Update (29.6.2025)
 
-I realised that the `state_space_allpole_unrolled` function I made is very close to a two-level [parallel scan](https://en.wikipedia.org/wiki/Prefix_sum), and with some modifications, we can squeeze a bit more speedup out of it.
+I realised that the `state_space_allpole_unrolled` function I made is very close to a two-level [parallel scan](https://en.wikipedia.org/wiki/Prefix_sum), and with some modifications, we can squeeze a bit more performance out of it.
 Instead of computing all the \\(T\\) states at once per block, we can just compute the last state, which is the only one we need for the next block.
 Thus, the matrix size for the multiplication is reduced from \\(\mathbf{M} \in \mathbb{R}^{MT\\times MT}\\) to \\(\mathbf{A}^T \in \mathbb{R}^{M\\times M}\\).
 The first \\(M-1\\) states for all the blocks can be computed later in parallel.
