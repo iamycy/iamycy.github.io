@@ -1,5 +1,5 @@
 ---
-title: 'Notes on differentiable TDF-II filter'
+title: 'Notes on Differentiable TDF-II Filter'
 date: 2025-04-26
 permalink: /posts/2025/04/differentiable-tdf-ii/
 tags:
