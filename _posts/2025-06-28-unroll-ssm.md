@@ -317,9 +317,9 @@ Notice that in the second line, I utilised the fact that \\(\mathbf{B}\\) has on
 (This is not possible if the filter is not strictly all-pole.)
 \\(\mathbf{I}_{.1}\\) denotes the first column of the identity matrix and so on.
 
-Now, the number of autoregressive steps is reduced from \\(T\\) to \\(\\frac{N}{T}\\) and the matrix multiplication is done in parallel for every \\(T\\) samples.
+Now, the number of autoregressive steps is reduced from \\(N\\) to \\(\\frac{N}{T}\\) and the matrix multiplication is done in parallel for every \\(T\\) samples.
 There are added costs for pre-computing the transition matrix \\(\mathbf{M}\\) and the input matrix \\(\mathbf{V}\\), though.
-However, as long as the extra cost is relatively small compared to the cost of \\(T\\) autoregressive steps, we should observe a speedup.
+However, as long as the extra cost is relatively small compared to the cost of \\(N - \\frac{N}{T}\\) autoregressive steps, we should observe a speedup.
 
 Here's the PyTorch implementation of the unrolled SSM:
 
