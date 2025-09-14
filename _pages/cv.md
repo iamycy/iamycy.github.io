@@ -19,7 +19,7 @@ Work experience
 * Summer 2024 - Winter 2024: Research Intern
   * Sony AI, Sony, Tokyo, Japan
   * Duties include: differentiable audio processing and audio mixing
-  * Supervisor: Manager Weih Siang Liao
+  * Supervisor: Manager Wei-Hsiang Liao
 
 * Winter 2020 - Summer 2022: Backend Engineer
   * Backend R&D, Rayark Inc., Taipei, Taiwan
