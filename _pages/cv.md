@@ -11,7 +11,7 @@ redirect_from:
 
 Education
 ======
-* Ph.D in Electronic Engineering and Computer Science, Queen Mary University of London, UK, 2022 ~ 2026 (expected)
+* Ph.D in Electronic Engineering and Computer Science, Queen Mary University of London, UK, 2022 ~ 2027 (expected)
 * B.S. in Computer Science, National Chiao Tung University, Taiwan, 2014 ~ 2018
 
 Work experience
@@ -82,9 +82,14 @@ Demonstration
   * Queen Mary University of London, UK
   * Module Organiser: Dr. Luk Arnaut
  
-Peer-reviewed
+Reviewed
 ======
+* 2026
+  * ICASSP
 * 2025
+  * DMRN+20 Workshop
+  * AI for Music Workshop @NeurIPS
+  * DiffSys Workshop @EurIPS
   * ICASSP
   * ISMIR
   * AES AIMLA
@@ -94,6 +99,7 @@ Peer-reviewed
   * IEEE TASLP x1
   * IEEE SPL x1
 * 2023
+  * DMRN+18 Workshop
   * AAAI
 
 
