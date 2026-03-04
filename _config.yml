@@ -9,7 +9,7 @@
 # Basic Site Settings
 locale: "en-gb"
 site_theme: "default" # Currently available options are "default", "air"
-title: "YCY / Kazane no Heya"
+title: "YCY / Kazaneya"
 title_separator: "-"
 name: &name "Chin-Yun Yu"
 description: &description "Researcher & Software/Algorithm Engineer"
