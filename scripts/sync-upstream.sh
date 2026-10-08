@@ -22,8 +22,19 @@ if ! git diff --quiet || ! git diff --cached --quiet; then
   exit 1
 fi
 
+# Start from the latest pushed state so the sync doesn't diverge from origin.
+if ! git pull --no-rebase --no-edit; then
+  echo "git pull failed; resolve it, then rerun this script." >&2
+  exit 1
+fi
+
 git fetch upstream
 git merge --no-ff --no-commit "$UPSTREAM" || true
+
+if ! git rev-parse -q --verify MERGE_HEAD >/dev/null; then
+  echo "Already up to date with $UPSTREAM."
+  exit 0
+fi
 
 # Reset personal paths to our side: drop files upstream added there, clear
 # conflicted index entries, then restore our committed versions.
