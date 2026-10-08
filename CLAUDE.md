@@ -36,7 +36,9 @@ Content is driven by Jekyll collections declared in `_config.yml` (`publications
 
 ## Math and rendering
 
-MathJax 3 is loaded globally from `_includes/head/custom.html`. Kramdown processes the markdown first, so inline math in posts is written `\\(...\\)` (double backslash) and display math as `$$ ... $$` on its own lines. Follow the existing posts' style.
+MathJax 4 is loaded on every page from `_includes/footer/custom.html`. Kramdown processes the markdown first, so inline math in posts is written `\\(...\\)` (double backslash) and display math as `$$ ... $$` on its own lines. Follow the existing posts' style.
+
+The theme JS (`assets/js/_main.js`) renders fenced ` ```mermaid ` blocks as diagrams and ` ```plotly ` blocks (JSON with `data` and `layout`) as interactive charts. It loads each library from a CDN only on pages that use it, and redraws Plotly charts when the light/dark theme changes.
 
 Site-wide head and analytics customisations go in `_includes/head/custom.html` and `_includes/analytics-providers/custom.html` (Google Analytics, `provider: "custom"`), not in the theme's core includes. Styles are SCSS in `_sass/`.
 
