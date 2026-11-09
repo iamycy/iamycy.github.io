@@ -52,5 +52,28 @@ if [ -n "$conflicts" ]; then
   exit 1
 fi
 
+# Theme behaviour changes (JS, styles, layouts) merge silently without conflicts,
+# so show them for review before committing.
+THEME=(assets/js assets/css _sass _layouts _includes package.json Gemfile)
+total=$(git rev-list --count --no-merges HEAD..MERGE_HEAD)
+echo "Merging $total upstream commits. Those touching theme files:"
+git --no-pager log --oneline --no-merges HEAD..MERGE_HEAD -- "${THEME[@]}"
+echo
+echo "Theme changes staged by this merge:"
+git --no-pager diff --cached --stat HEAD -- "${THEME[@]}"
+echo
+
+if [ ! -t 0 ]; then
+  echo "Not interactive: merge left uncommitted. Review it, then run" >&2
+  echo "'git commit --no-edit' or 'git merge --abort'." >&2
+  exit 1
+fi
+read -r -p "Commit this merge? [y/N] " answer
+if [ "$answer" != y ] && [ "$answer" != Y ]; then
+  git merge --abort
+  echo "Merge aborted."
+  exit 1
+fi
+
 git commit --no-edit
 echo "Merged $UPSTREAM. Preview with: bundle exec jekyll serve"
