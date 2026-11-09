@@ -15,6 +15,7 @@ PERSONAL=(
   _pages/cv.md
   _includes/analytics-providers/custom.html
   _sass/_custom.scss
+  .github/workflows/scrape_talks.yml
   _posts _publications _talks _teaching _portfolio files
 )
 
@@ -43,7 +44,8 @@ comm -23 <(git ls-files -- "${PERSONAL[@]}" | sort -u) \
          <(git ls-tree -r --name-only HEAD -- "${PERSONAL[@]}" | sort -u) |
   while IFS= read -r f; do rm -f -- "$f"; done
 git rm -r -q --cached --ignore-unmatch -- "${PERSONAL[@]}"
-git checkout HEAD -- "${PERSONAL[@]}"
+# Restore only paths HEAD has, so a PERSONAL path we deleted stays deleted.
+git ls-tree -r -z --name-only HEAD -- "${PERSONAL[@]}" | xargs -0 -r git checkout HEAD --
 
 conflicts=$(git diff --name-only --diff-filter=U)
 if [ -n "$conflicts" ]; then
