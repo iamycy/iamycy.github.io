@@ -14,6 +14,7 @@ PERSONAL=(
   _pages/about.md
   _pages/cv.md
   _includes/analytics-providers/custom.html
+  _sass/_custom.scss
   _posts _publications _talks _teaching _portfolio files
 )
 

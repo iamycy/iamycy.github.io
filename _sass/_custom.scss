@@ -1,0 +1,18 @@
+/* ==========================================================================
+   Site-specific overrides (not part of the Academic Pages template)
+
+   Imported last from assets/css/main.scss and listed in PERSONAL in
+   scripts/sync-upstream.sh, so upstream syncs never touch it.
+   ========================================================================== */
+
+/* Responsive YouTube embeds. Upstream dropped FitVids (#3151), which used to
+   scale iframes to the content width; do it in CSS instead. */
+iframe[src*="youtube.com/embed"],
+iframe[src*="youtube-nocookie.com/embed"] {
+  display: block;
+  width: 100%;
+  max-width: 100%;
+  height: auto;
+  aspect-ratio: 16 / 9;
+  border: 0;
+}
