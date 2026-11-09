@@ -40,7 +40,7 @@ MathJax 4 is loaded on every page from `_includes/footer/custom.html`. Kramdown 
 
 The theme JS (`assets/js/_main.js`) renders fenced ` ```mermaid ` blocks as diagrams and ` ```plotly ` blocks (JSON with `data` and `layout`) as interactive charts. It loads each library from a CDN only on pages that use it, and redraws Plotly charts when the light/dark theme changes.
 
-Site-wide head and analytics customisations go in `_includes/head/custom.html` and `_includes/analytics-providers/custom.html` (Google Analytics, `provider: "custom"`), not in the theme's core includes. Styles are SCSS in `_sass/`. Put site-specific style overrides in `_sass/_custom.scss` (imported last from `assets/css/main.scss` and listed in `PERSONAL`), not in the theme's own SCSS files. It currently makes YouTube iframes responsive, because upstream removed FitVids (#3151). YouTube embeds use the standard embed code (`allow` list, `referrerpolicy`, `allowfullscreen`); this rule handles their size.
+Site-wide head and analytics customisations go in `_includes/head/custom.html` and `_includes/analytics-providers/custom.html` (Google Analytics, `provider: "custom"`), not in the theme's core includes. Styles are SCSS in `_sass/`. Put site-specific style overrides in `_sass/_custom.scss` (imported last from `assets/css/main.scss` and listed in `PERSONAL`), not in the theme's own SCSS files. It currently makes YouTube iframes responsive, because upstream removed FitVids (#3151). The `width="16" height="9"` embeds in `_pages/music.md` rely on this rule.
 
 ## Generated / ignored
 

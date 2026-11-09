@@ -13,7 +13,10 @@ I recently came across a presentation by Andres Ezequiel Viso from GPU Audio at 
 The approach they use is to formulate the IIR filter as a state-space model (SSM) and augment the transition matrix so that each step processes multiple samples at once.
 The primary speedup stems from the fact that GPUs are very good at performing large matrix multiplications, and the SSM formulation enables us to leverage this capability.
 
-<iframe width="560" height="315" src="https://www.youtube.com/embed/UmYnoFo0Bb8?start=1356" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe><br>
+<iframe width="1024px" height="576px"
+src="https://www.youtube.com/embed/UmYnoFo0Bb8?start=1356"
+allowfullscreen>
+</iframe><br>
 
 Speeding up IIR filters while maintaining differentiability has always been my interest.
 The most recent method I worked on is from my recent [submission](https://arxiv.org/abs/2504.14735) to DAFx 25, where my co-author Ben proposed using parallel associative scan to speed up the recursion on the GPU.

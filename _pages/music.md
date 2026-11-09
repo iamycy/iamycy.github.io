@@ -15,7 +15,9 @@ Some music pieces I produced in the past or have been involved with. Most of my 
 
 Concept music I wrote after watching the anime series **SSSS.GRIDMAN**. I was addicted to Synthwave at the time so the vibe of this song is very different from my usual works.
 
-<iframe width="560" height="315" src="https://www.youtube.com/embed/quYTmdfmQS0" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+<iframe width="16" height="9"
+src="https://www.youtube.com/embed/quYTmdfmQS0">
+</iframe>
 
 ---
 
@@ -29,14 +31,18 @@ I joined the virtual djent band **Catalyst** in Taipei as the guitar player arou
 
 One of the song from this album, _Rei_, is also featured in the mobile rhythm game _Cytus 2_.
 
-<iframe width="560" height="315" src="https://www.youtube.com/embed/P07jBLscGGo" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+<iframe width="16" height="9"
+src="https://www.youtube.com/embed/P07jBLscGGo">
+</iframe>
 
 
 ## The Cross (feat. Silvia Su) - Lyc
 
 This is a character song from _Cytus 2_, and I did the mixing and mastering part (it was actually a commission).
 
-<iframe width="560" height="315" src="https://www.youtube.com/embed/r0HvF_2zN6I" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+<iframe width="16" height="9"
+src="https://www.youtube.com/embed/r0HvF_2zN6I">
+</iframe>
 
 ---
 
